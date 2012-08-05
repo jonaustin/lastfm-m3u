@@ -14,5 +14,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Toptracks::VERSION
 
-  gem.add_development_dependency 'rspec' 
+  gem.add_development_dependency 'rspec', '~> 2.11.0'
+  gem.add_dependency 'rockstar', '~> 0.6.4'
+  gem.add_dependency 'mp3info', '~> 0.6.18'
 end
