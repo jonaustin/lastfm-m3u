@@ -27,6 +27,11 @@ OptionParser.new do |opts|
     puts artists
   end
 
+  # directory
+  opts.on("-d DIR", "directory") do |directory|
+    options.dir = dir
+  end
+
   opts.on('-o', '--output FILENAME', 'Write m3u to FILENAME (only with -a)') do |fn|
     options.out_file = fn
   end
