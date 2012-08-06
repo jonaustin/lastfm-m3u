@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
 require 'rubygems'
 require 'optparse'
+require 'ostruct'
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'toptracks'
 require 'toptracks/version'
 
-options = {}
+options = OpenStruct.new()
 parser = OptionParser.new do |opts|
   opts.banner = "Toptracks Playlist Creator"
   opts.define_head "Usage: toptracks [options]"
@@ -21,11 +22,11 @@ parser = OptionParser.new do |opts|
   opts.separator "Options:"
 
   opts.on('-o', '--output FILENAME', 'Write m3u to FILENAME (only with -a)') do |fn|
-    options[:out_file] = fn
+    options.out_file = fn
   end
 
   opts.on('-f', '--force', 'Overwrite existing output file(s)') do
-    options[:force] = true
+    options.force = true
   end
 
   opts.on_tail('-v', '--version', 'Show Toptracks version') do
@@ -40,3 +41,5 @@ parser = OptionParser.new do |opts|
 
 end
 parser.parse!
+
+
