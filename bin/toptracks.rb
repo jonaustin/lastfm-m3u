@@ -8,7 +8,7 @@ require 'toptracks'
 require 'toptracks/version'
 
 options = OpenStruct.new()
-parser = OptionParser.new do |opts|
+OptionParser.new do |opts|
   opts.banner = "Toptracks Playlist Creator"
   opts.define_head "Usage: toptracks [options]"
   opts.separator ""
@@ -20,6 +20,12 @@ parser = OptionParser.new do |opts|
   opts.separator ""
   opts.separator ""
   opts.separator "Options:"
+
+  # List of artists
+  opts.on("-a x,y,z", Array, "list of artists") do |artists|
+    options.artists = artists
+    puts artists
+  end
 
   opts.on('-o', '--output FILENAME', 'Write m3u to FILENAME (only with -a)') do |fn|
     options.out_file = fn
@@ -39,7 +45,4 @@ parser = OptionParser.new do |opts|
     exit
   end
 
-end
-parser.parse!
-
-
+end.parse!
