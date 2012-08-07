@@ -11,11 +11,17 @@ module Toptracks
       def initialize(artist)
         Rockstar.lastfm = YAML.load_file(File.join(File.dirname(__FILE__), '../../../lastfm.yml')) #FIXME
         @artist = Rockstar::Artist.new(artist)
-        @m3u = File.new(playlist_dir + '_LASTFM-TOP_-_' + artist.name + '.m3u', 'w');
+        @tracks = []
+        @m3u = File.new('_LASTFM-TOP_-_' + @artist.name + '.m3u', 'w')
       end
 
       def fetch_tracks
         @artist.top_tracks.each do |track|
+          @tracks << track
+          next
+
+
+
           track.name = CGI.unescapeHTML(track.name)
           found_file = nil
           # loop through each mp3's id3 song tag to see if it matches
@@ -66,7 +72,7 @@ module Toptracks
           end
         end
 
-        m3u.close
+        @m3u.close
 
       end
     end
