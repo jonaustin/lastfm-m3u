@@ -3,6 +3,6 @@ require 'fileutils'
 require 'pathname'
 require 'toptracks/version'
 
-module Toptracks
-  autoload :Base, 'toptracks/base'
-end
+require 'toptracks/database'
+require 'toptracks/sources/lastfm'
+require 'toptracks/media'

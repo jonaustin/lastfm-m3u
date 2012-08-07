@@ -24,15 +24,14 @@ OptionParser.new do |opts|
   # List of artists
   opts.on("-a x,y,z", Array, "list of artists") do |artists|
     options.artists = artists
-    puts artists
   end
 
   # directory
   opts.on("-d DIR", "directory") do |directory|
-    options.dir = dir
+    options.dir = directory
   end
 
-  opts.on('-o', '--output FILENAME', 'Write m3u to FILENAME (only with -a)') do |fn|
+  opts.on('-o', '--output FILENAME', 'Write m3u to FILENAME') do |fn| # writes single m3u when multiple artists
     options.out_file = fn
   end
 
@@ -51,3 +50,11 @@ OptionParser.new do |opts|
   end
 
 end.parse!
+
+unless options.artists
+  raise ArgumentError, "Please provide at least one artist (-a Elvis)"
+end
+
+options.artists.each do |artist|
+  lfartist = Toptracks::Sources::Lastfm.new(artist)
+end
