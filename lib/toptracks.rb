@@ -3,6 +3,12 @@ require 'fileutils'
 require 'pathname'
 require 'toptracks/version'
 
-require 'toptracks/database'
-require 'toptracks/sources/lastfm'
-require 'toptracks/media'
+require 'rockstar'
+require 'mp3info'
+require 'mongoid'
+
+require 'toptracks/track'
+require 'toptracks/lastfm'
+require 'toptracks/file'
+
+
