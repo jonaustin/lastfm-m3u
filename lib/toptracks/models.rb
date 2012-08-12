@@ -1,4 +1,12 @@
 module Toptracks
+  require "mongoid"
+
+  Mongoid.configure do |config|
+    ENV["MONGOID_ENV"] ||= 'development'
+    file_name = File.join(File.dirname(__FILE__), "..", "..", "config", "mongoid.yml")
+    config.load!(file_name)
+  end
+
   class Track
     include Mongoid::Document
     include Mongoid::Timestamps
