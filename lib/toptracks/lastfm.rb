@@ -23,24 +23,6 @@ module Toptracks
         # no: continue
         # match: add to m3u file
 
-        # First - simple file find *name* to see if any filename matches exist
-        Dir["#{dir}/**/*.flac"].each do |flac|
-          if File.basename(flac) =~ /.*#{track.name}.*/i then
-            found_file = flac
-            puts track.name + ' = ' + found_file if DEBUG >= 2
-            break
-          end
-        end
-        if found_file.nil? then  ### Prefer FLAC
-          Dir["#{dir}/**/*.mp3"].each do |mp3|
-            if File.basename(mp3) =~ /.*#{Regexp.escape track.name}.*/i then
-              found_file = mp3
-              puts track.name + ' = ' + found_file if DEBUG >= 2
-              break
-            end
-          end
-        end
-
         # attempt to find via id3 tracks otherwise
         if found_file.nil? then
           puts track.name if DEBUG >= 2
