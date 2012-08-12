@@ -28,14 +28,14 @@ module Toptracks
           begin
             if mp3.basename.to_s =~ /.*#{Regexp.escape track.name}.*/i then
               found_file = mp3
-              puts "#{track.name} => #{found_file}" #if DEBUG >= 2
+              puts "#{track.name} => #{found_file}".color(:green) #if DEBUG >= 2
               break
             end
           rescue ArgumentError => e
             # for some reason it gets 'invalid byte sequence in UTF-8
             # even though replacing ascii below with utf-8 causes nothing to be replaced..wtf.
             mp3 = Pathname mp3.to_s.encode('ascii', invalid: :replace, undef: :replace, replace: '??')
-            puts "#{e.message} => #{mp3.relative_path_from(root_dir)}"
+            puts "#{e.message} => #{mp3.relative_path_from(root_dir)}".color(:red)
           end
         end
       end

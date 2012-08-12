@@ -6,6 +6,7 @@ require 'toptracks/version'
 require 'rockstar'
 require 'mp3info'
 require 'mongoid'
+require 'rainbow'
 
 require 'toptracks/track'
 require 'toptracks/lastfm'

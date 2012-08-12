@@ -21,4 +21,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'ruby-mp3info', '~> 0.7.1'
   gem.add_dependency 'mongoid', '~> 3.0.3'
   gem.add_dependency 'bson_ext', '~> 1.6.4'
+  gem.add_dependency 'rainbow', '~> 1.1.4'
 end
