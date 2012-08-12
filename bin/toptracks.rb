@@ -7,7 +7,7 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'toptracks'
 require 'toptracks/version'
 
-options = OpenStruct.new()
+options = OpenStruct.new
 OptionParser.new do |opts|
   opts.banner = "Toptracks Playlist Creator"
   opts.define_head "Usage: toptracks [options]"

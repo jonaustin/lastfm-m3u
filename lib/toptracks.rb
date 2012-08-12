@@ -11,4 +11,7 @@ require 'toptracks/track'
 require 'toptracks/lastfm'
 require 'toptracks/file'
 
-
+module Toptracks
+  DEBUG=0
+  ECHO=0
+end

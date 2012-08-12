@@ -1,7 +1,5 @@
 module Toptracks
   class Lastfm
-    DEBUG=0
-    ECHO=0
 
     attr_reader :artist, :tracks
 
