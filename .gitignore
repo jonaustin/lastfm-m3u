@@ -16,5 +16,6 @@ test/tmp
 test/version_tmp
 tmp
 tags
+gems.tags
 lastfm.yml
 *m3u

@@ -7,3 +7,8 @@ guard 'rspec', :version => 2 do
   watch('spec/spec_helper.rb')  { "spec" }
 end
 
+
+guard 'ctags-bundler', :src_path => ["lib", "spec/support"] do
+  watch(/^(lib|spec\/support)\/.*\.rb$/)
+  watch('Gemfile.lock')
+end
