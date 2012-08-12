@@ -10,7 +10,7 @@ require 'ansi/logger'
 
 require 'toptracks/models'
 require 'toptracks/lastfm'
-require 'toptracks/file'
+require 'toptracks/search'
 
 module Toptracks
   DEBUG=0

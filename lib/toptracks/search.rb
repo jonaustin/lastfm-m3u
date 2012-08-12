@@ -1,7 +1,7 @@
 module Toptracks
   require 'pathname'
 
-  class File
+  class Search
     attr_accessor :root_dir, :track, :file
 
     def initialize(root_dir, track)
