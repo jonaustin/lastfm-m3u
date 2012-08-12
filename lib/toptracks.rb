@@ -15,5 +15,5 @@ require 'toptracks/file'
 module Toptracks
   DEBUG=0
   ECHO=0
-  $log = ANSI::Logger.new(STDOUT)
+  $logger = ANSI::Logger.new(STDOUT)
 end
