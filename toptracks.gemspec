@@ -22,4 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'mongoid', '~> 3.0.3'
   gem.add_dependency 'bson_ext', '~> 1.6.4'
   gem.add_dependency 'rainbow', '~> 1.1.4'
+  gem.add_dependency 'ansi', '~> 1.4.3' # color logging
 end
