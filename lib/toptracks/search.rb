@@ -32,7 +32,7 @@ module Toptracks
       found_file = false
       Dir["#{root_dir}/**/*.#{ext}"].each do |file|
         begin
-          file = Pathname file
+          file = Pathname.new file
           normalized_file = file.basename.sub('-', ' ').sub('_', ' ').sub(/#{file.extname}$/, '') # poor man's normalization
           if normalized_file.to_s =~ /.*#{Regexp.escape track.name}.*/i then
             found_file = file

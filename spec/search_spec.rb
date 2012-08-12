@@ -3,7 +3,7 @@ require 'ostruct'
 
 describe Toptracks::Search do
   let(:music_dir) { File.expand_path('../fixtures/music', __FILE__) }
-  let(:track) { OpenStruct.new(name: 'my way') }
+  let(:track) { OpenStruct.new(name: 'stepping stone') }
   let(:search) { Toptracks::Search.new(music_dir, track) }
 
   context "root dir" do
@@ -19,8 +19,27 @@ describe Toptracks::Search do
   context "find" do
     it "should find a file if one exists" do
       search.find(false)
-      search.file.to_s.should match /my_way.mp3/
+      search.file.to_s.should match /stepping stone/
+    end
+
+    context "normalization" do
+      it "should find a filename with underscores in place of spaces" do
+        search.track = OpenStruct.new(name: 'my way')
+        search.find(false)
+        search.file.to_s.should match /my_way/
+      end
+
+      it "should find a file with dashes in place of spaces" do
+        search.track = OpenStruct.new(name: 'poa alpina')
+        search.find(false)
+        search.file.to_s.should match /poa-alpina/
+      end
+
+      it "should continue when bad filename" do
+        file = Pathname.new "spec/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
+        Pathname.stub(:new).and_return file
+        expect { search.find(false) }.to raise_error ArgumentError 
+      end
     end
   end
 end
-
