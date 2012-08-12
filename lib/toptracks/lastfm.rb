@@ -1,10 +1,10 @@
 module Toptracks
   class Lastfm
 
-    attr_reader :artist, :tracks
+    attr_reader :artist, :tracks, :rockstar
 
     def initialize(artist)
-      Rockstar.lastfm = YAML.load_file(File.join(File.dirname(__FILE__), '../../../lastfm.yml')) #FIXME
+      @rockstar = Rockstar.lastfm = YAML.load_file(File.join(File.dirname(__FILE__), '../../config/lastfm.yml')) #FIXME
       @artist = Rockstar::Artist.new(artist)
       @tracks = []
       @m3u = File.new('_LASTFM-TOP_-_' + @artist.name + '.m3u', 'w')
