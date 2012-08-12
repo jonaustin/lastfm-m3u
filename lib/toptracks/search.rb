@@ -30,7 +30,7 @@ module Toptracks
 
     def find_file(ext)
       found_file = false
-      Dir["#{root_dir}/**/*.#{ext}"].each do |file|
+      Dir.glob("#{root_dir}/**/*.#{ext}").each do |file|
         begin
           file = Pathname.new file
           normalized_file = file.basename.sub('-', ' ').sub('_', ' ').sub(/#{file.extname}$/, '') # poor man's normalization

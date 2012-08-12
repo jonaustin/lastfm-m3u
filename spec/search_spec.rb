@@ -36,8 +36,8 @@ describe Toptracks::Search do
       end
 
       it "should continue when bad filename" do
-        file = Pathname.new "spec/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
-        Pathname.stub(:new).and_return file
+        path = "spec/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
+        Dir.stub_chain(:glob).and_return [path]
         expect { search.find(false) }.to raise_error ArgumentError 
       end
     end
