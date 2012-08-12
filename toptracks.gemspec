@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.version       = Toptracks::VERSION
 
   gem.add_development_dependency 'rspec', '~> 2.11.0'
+  gem.add_development_dependency 'guard-rspec', '~> 1.2.1'
   gem.add_development_dependency 'debugger', '~> 1.2.0'
 
   gem.add_dependency 'rockstar', '~> 0.6.4'
