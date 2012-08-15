@@ -55,8 +55,10 @@ unless options.artists
 end
 
 options.artists.each do |artist|
-  lfartist = Toptracks::Sources::Lastfm.new(artist)
-  lfartist.fetch_tracks
+  search = Toptracks::Search.new('/home/jon/music')
+  search.artist.new(artist).top_tracks.each { |track| puts track.name }
+
+  #lfartist.fetch_tracks
   #puts lfartist.tracks[0].methods
-  lfartist.tracks.each { |t| puts "#{t.playcount} - #{t.name}" }
+  #lfartist.tracks.each { |t| puts "#{t.playcount} - #{t.name}" }
 end
