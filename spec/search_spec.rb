@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'ostruct'
 
 describe Toptracks::Search do
-  let(:music_dir) { File.expand_path("../../support/fixtures/music", __FILE__) }
+  let(:music_dir) { File.expand_path("../support/fixtures/music", __FILE__) }
   let(:track) { OpenStruct.new(name: 'stepping stone') }
   let(:search) { Toptracks::Search.new(music_dir, track) }
 
