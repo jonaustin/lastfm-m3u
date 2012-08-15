@@ -5,15 +5,10 @@ require 'toptracks/version'
 
 require 'rockstar'
 require 'mp3info'
+require 'm3uzi'
 require 'rainbow'
 require 'ansi/logger'
 
+require 'toptracks/base'
 require 'toptracks/models'
-require 'toptracks/lastfm'
 require 'toptracks/search'
-
-module Toptracks
-  DEBUG=0
-  ECHO=0
-  $logger = ANSI::Logger.new(STDOUT)
-end
