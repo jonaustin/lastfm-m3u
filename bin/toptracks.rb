@@ -5,7 +5,6 @@ require 'ostruct'
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'toptracks'
-require 'toptracks/version'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
