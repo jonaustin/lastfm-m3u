@@ -39,7 +39,7 @@ module Toptracks
           normalized_file = file.basename.sub('-', ' ').sub('_', ' ').sub(/#{file.extname}$/, '') # poor man's normalization
           if normalized_file.to_s =~ /.*#{Regexp.escape track.name}.*/i then
             found_file = file
-            @logger.info "#{track.name} => #{found_file}"
+            @logger.debug "#{track.name} => #{found_file}"
             break
           end
         rescue ArgumentError => e
