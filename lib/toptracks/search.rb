@@ -9,7 +9,7 @@ module Toptracks
       @root_dir = Pathname root_dir
       @track    = track # rockstar track
       @file     = nil
-      super
+      super()
     end
 
     def find(type='both', prefer_flac=true)
@@ -39,14 +39,14 @@ module Toptracks
           normalized_file = file.basename.sub('-', ' ').sub('_', ' ').sub(/#{file.extname}$/, '') # poor man's normalization
           if normalized_file.to_s =~ /.*#{Regexp.escape track.name}.*/i then
             found_file = file
-            $logger.info "#{track.name} => #{found_file}"
+            @logger.info "#{track.name} => #{found_file}"
             break
           end
         rescue ArgumentError => e
           # for some reason it gets 'invalid byte sequence in UTF-8
           # even though replacing ascii below with utf-8 causes nothing to be replaced..wtf.
           file = Pathname file.to_s.encode('ascii', invalid: :replace, undef: :replace, replace: '??')
-          $logger.warn "#{e.message} => #{file.relative_path_from(root_dir)}"
+          @logger.warn "#{e.message} => #{file.relative_path_from(root_dir)}"
         end
       end
       found_file
@@ -55,7 +55,7 @@ module Toptracks
     def find_by_id3
       track.name = CGI.unescapeHTML(track.name)
       found_file = false
-      $logger.info track.name
+      @logger.info track.name
       Dir.glob("#{root_dir}/**/*.mp3").each do |file|
         file = Pathname.new file
         begin
@@ -66,7 +66,7 @@ module Toptracks
             found_file = id3.filename
           end
         rescue Mp3InfoError => e
-          $logger.warn "#{e.message} => #{file.relative_path_from(root_dir)}"
+          @logger.warn "#{e.message} => #{file.relative_path_from(root_dir)}"
         end
       end
       found_file
