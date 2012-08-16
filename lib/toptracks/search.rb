@@ -10,12 +10,11 @@ module Toptracks
       super()
     end
 
-    def find(query, type='both', prefer_flac=true)
-      if type == 'both' or type == 'file'
-        # File find to see if any filename matches
-        file = find_by_filename(query, 'flac') if prefer_flac
-        file = find_by_filename(query, 'mp3') unless file
-      elsif type == 'both' or type == 'id3'
+    def find(query, query_type=:track, file_or_id3=:both, prefer_flac=true)
+      if file_or_id3 == :both or file_or_id3 == :file
+        file = find_by_filename(query, :flac) if prefer_flac
+        file = find_by_filename(query, :mp3) unless file
+      elsif file_or_id3 == :both or file_or_id3 == :id3
         file = find_by_id3(query)
       end
       file
@@ -28,11 +27,9 @@ module Toptracks
       t
     end
 
-    protected
-
     def find_by_filename(name, ext)
       found_file = false
-      Dir.glob("#{root_dir}/**/*.#{ext}").each do |file|
+      Dir.glob("#{root_dir}/**/*.#{ext.to_s}").each do |file|
         begin
           file = Pathname.new file
           normalized_file = file.basename.sub('-', ' ').sub('_', ' ').sub(/#{file.extname}$/, '') # poor man's normalization

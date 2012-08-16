@@ -23,32 +23,32 @@ describe Toptracks::Search do
 
   context "find by filename" do
     it "should find a file if one exists" do
-      search.find('stepping stone', 'file').to_s.should match /stepping stone/
+      search.find('stepping stone', :track, :file).to_s.should match /stepping stone/
     end
 
     context "normalization" do
       it "should find a filename with underscores in place of spaces" do
-        search.find('my way', 'file').to_s.should match /my_way/
+        search.find('my way', :track, :file).to_s.should match /my_way/
       end
 
       it "should find a file with dashes in place of spaces" do
-        search.find('poa alpina', 'file').to_s.should match /poa-alpina/
+        search.find('poa alpina', :track, :file).to_s.should match /poa-alpina/
       end
 
       it "should continue when bad filename" do
-        path = "spec/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
+        path = "spec/support/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
         Dir.stub_chain(:glob).and_return [path]
-        expect { search.find('tchaikovsky', 'file', false) }.to raise_error ArgumentError
+        expect { search.find('tchaikovsky', :track, :file, false) }.to raise_error ArgumentError
       end
 
       context "prefer flac" do
         it "should find flac" do
-          search.find('flac song', 'file', true).to_s.should match /flac song/
+          search.find('flac song', :track, :file, true).to_s.should match /flac song/
         end
 
         it "should search twice if no flac found" do
           search.should_receive(:find_by_filename).twice
-          search.find('my way', 'file', true)
+          search.find('my way', :track, :file, true)
         end
       end
     end
@@ -56,11 +56,11 @@ describe Toptracks::Search do
 
   context "find by id3" do
     it "should find a tag" do
-      search.find('id3v1', 'id3').to_s.should match /id3v1/i
+      search.find('id3v1', :track, :id3).to_s.should match /id3v1/i
     end
 
     it "should find a id3v2 tag" do
-      search.find('id3v2', 'id3').to_s.should match /id3v2/i
+      search.find('id3v2', :track, :id3).to_s.should match /id3v2/i
     end
   end
 
