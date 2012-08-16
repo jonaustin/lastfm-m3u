@@ -12,10 +12,10 @@ module Toptracks
 
     def find(query, query_type=:track, file_or_id3=:both, prefer_flac=true)
       if file_or_id3 == :both or file_or_id3 == :file
-        file = find_by_filename(query, :flac) if prefer_flac
-        file = find_by_filename(query, :mp3) unless file
+        file = find_by_filename(query, query_type, :flac) if prefer_flac
+        file = find_by_filename(query, query_type, :mp3) unless file
       elsif file_or_id3 == :both or file_or_id3 == :id3
-        file = find_by_id3(query)
+        file = find_by_id3(query, query_type)
       end
       file
     end
@@ -27,16 +27,22 @@ module Toptracks
       t
     end
 
-    def find_by_filename(name, ext)
+    def find_by_filename(name, query_type, ext)
       found_file = false
       Dir.glob("#{root_dir}/**/*.#{ext.to_s}").each do |file|
         begin
           file = Pathname.new file
-          normalized_file = file.basename.sub('-', ' ').sub('_', ' ').sub(/#{file.extname}$/, '') # poor man's normalization
-          if normalized_file.to_s =~ /.*#{Regexp.escape name}.*/i then
-            found_file = file
-            @logger.debug "#{name} => #{found_file}"
-            break
+          if query_type == :artist or query_type == :album
+            if file.directory? and normalize(file).to_s =~ /.*#{Regexp.escape name}.*/i
+              found_file = file
+              break
+            end
+          else
+            if normalize(file).to_s =~ /.*#{Regexp.escape name}.*/i
+              found_file = file
+              @logger.debug "#{name} => #{found_file}"
+              break
+            end
           end
         rescue ArgumentError => e
           # for some reason it gets 'invalid byte sequence in UTF-8
@@ -48,7 +54,7 @@ module Toptracks
       found_file
     end
 
-    def find_by_id3(query)
+    def find_by_id3(query, query_type)
       query = CGI.unescapeHTML(query)
       found_file = false
       @logger.info query
@@ -67,5 +73,10 @@ module Toptracks
       end
       found_file
     end
+
+    def normalize(pathname)
+      pathname.basename.sub('-', ' ').sub('_', ' ').sub(/#{pathname.extname}$/, '') # poor man's normalization
+    end
   end
+
 end
