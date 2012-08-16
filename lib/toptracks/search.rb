@@ -22,19 +22,16 @@ module Toptracks
 
     def find_in_filesystem(name, query_type, ext)
       if query_type == :artist or query_type == :album
-        found_entry = find_by_dir(name)
+        find_by_dir(name)
       else
-        found_entry = find_by_filename(name, ext)
+        find_by_filename(name, ext)
       end
-      found_entry
     end
 
     def find_by_dir(name)
       Dir.glob("#{root_dir}/**/*").each do |entry|
         entry = Pathname.new entry
-        if entry.directory? and normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
-          return entry
-        end
+        return entry if entry.directory? and normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
       end
     end
 
