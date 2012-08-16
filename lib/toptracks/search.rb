@@ -62,10 +62,24 @@ module Toptracks
         file = Pathname.new file
         begin
           id3 = Mp3Info.open(file)
-          if id3.hastag2? and id3.tag2.TIT2.downcase == query.downcase
-            found_file = id3.filename
-          elsif id3.hastag1? and id3.tag1.title.downcase == query.downcase
-            found_file = id3.filename
+          if query_type == :track
+            if id3.hastag2? and id3.tag2.TIT2.downcase == query.downcase
+              found_file = id3.filename
+            elsif id3.hastag1? and id3.tag1.title.downcase == query.downcase
+              found_file = id3.filename
+            end
+          elsif query_type == :album
+            if id3.hastag2? and id3.tag2.TALB.downcase == query.downcase
+              found_file = id3.filename
+            elsif id3.hastag1? and id3.tag1.album.downcase == query.downcase
+              found_file = id3.filename
+            end
+          elsif query_type == :artist
+            if id3.hastag2? and id3.tag2.TPE1.downcase == query.downcase
+              found_file = id3.filename
+            elsif id3.hastag1? and id3.tag1.artist.downcase == query.downcase
+              found_file = id3.filename
+            end
           end
         rescue Mp3InfoError => e
           @logger.warn "#{e.message} => #{file.relative_path_from(root_dir)}"
