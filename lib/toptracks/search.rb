@@ -12,49 +12,48 @@ module Toptracks
 
     def find(query, query_type=:track, file_or_id3=:both, prefer_flac=true)
       if file_or_id3 == :both or file_or_id3 == :file
-        file = find_by_filename(query, query_type, :flac) if prefer_flac
-        file = find_by_filename(query, query_type, :mp3) unless file
+        file = find_in_filesystem(query, query_type, :flac) if prefer_flac
+        file = find_in_filesystem(query, query_type, :mp3) unless file
       elsif file_or_id3 == :both or file_or_id3 == :id3
         file = find_by_id3(query, query_type)
       end
       file
     end
 
-    def self.test
-      track = OpenStruct.new(name: 'Concrete Angel')
-      t = self.new('/home/jon/music/trance', track)
-      t.find(false)
-      t
-    end
-
-    def find_by_filename(name, query_type, ext)
-      found_entry = false
+    def find_in_filesystem(name, query_type, ext)
       if query_type == :artist or query_type == :album
-        Dir.glob("#{root_dir}/**/*").each do |entry|
-          entry = Pathname.new entry
-          if entry.directory? and normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
-            found_entry = entry
-            break
-          end
-        end
+        found_entry = find_by_dir(name)
       else
-        Dir.glob("#{root_dir}/**/*.#{ext.to_s}").each do |entry|
-          begin
-            entry = Pathname.new entry
-            if normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
-              found_entry = entry
-              @logger.debug "#{name} => #{found_entry}"
-              break
-            end
-          rescue ArgumentError => e
-            # for some reason it gets 'invalid byte sequence in UTF-8
-            # even though replacing ascii below with utf-8 causes nothing to be replaced.
-            entry = Pathname entry.to_s.encode('ascii', invalid: :replace, undef: :replace, replace: '??')
-            @logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
-          end
-        end
+        found_entry = find_by_filename(name, ext)
       end
       found_entry
+    end
+
+    def find_by_dir(name)
+      Dir.glob("#{root_dir}/**/*").each do |entry|
+        entry = Pathname.new entry
+        if entry.directory? and normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
+          return entry
+        end
+      end
+    end
+
+    def find_by_filename(name, ext)
+      Dir.glob("#{root_dir}/**/*.#{ext.to_s}").each do |entry|
+        begin
+          entry = Pathname.new entry
+          if normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
+            @logger.debug "#{name} => #{entry}"
+            return entry
+          end
+        rescue ArgumentError => e
+          # for some reason it gets 'invalid byte sequence in UTF-8
+          # even though replacing ascii below with utf-8 causes nothing to be replaced.
+          entry = Pathname entry.to_s.encode('ascii', invalid: :replace, undef: :replace, replace: '??')
+          @logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
+        end
+      end
+      false
     end
 
     def find_by_id3(query, query_type)
