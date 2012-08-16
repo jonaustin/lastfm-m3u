@@ -28,68 +28,71 @@ module Toptracks
     end
 
     def find_by_filename(name, query_type, ext)
-      found_file = false
-      Dir.glob("#{root_dir}/**/*.#{ext.to_s}").each do |file|
-        begin
-          file = Pathname.new file
-          if query_type == :artist or query_type == :album
-            if file.directory? and normalize(file).to_s =~ /.*#{Regexp.escape name}.*/i
-              found_file = file
-              break
-            end
-          else
-            if normalize(file).to_s =~ /.*#{Regexp.escape name}.*/i
-              found_file = file
-              @logger.debug "#{name} => #{found_file}"
-              break
-            end
+      found_entry = false
+      if query_type == :artist or query_type == :album
+        Dir.glob("#{root_dir}/**/*").each do |entry|
+          entry = Pathname.new entry
+          if entry.directory? and normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
+            found_entry = entry
+            break
           end
-        rescue ArgumentError => e
-          # for some reason it gets 'invalid byte sequence in UTF-8
-          # even though replacing ascii below with utf-8 causes nothing to be replaced..wtf.
-          file = Pathname file.to_s.encode('ascii', invalid: :replace, undef: :replace, replace: '??')
-          @logger.warn "#{e.message} => #{file.relative_path_from(root_dir)}"
+        end
+      else
+        Dir.glob("#{root_dir}/**/*.#{ext.to_s}").each do |entry|
+          begin
+            entry = Pathname.new entry
+            if normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
+              found_entry = entry
+              @logger.debug "#{name} => #{found_entry}"
+              break
+            end
+          rescue ArgumentError => e
+            # for some reason it gets 'invalid byte sequence in UTF-8
+            # even though replacing ascii below with utf-8 causes nothing to be replaced.
+            entry = Pathname entry.to_s.encode('ascii', invalid: :replace, undef: :replace, replace: '??')
+            @logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
+          end
         end
       end
-      found_file
+      found_entry
     end
 
     def find_by_id3(query, query_type)
       query = CGI.unescapeHTML(query)
-      found_file = false
+      found_entry = false
       @logger.info query
-      Dir.glob("#{root_dir}/**/*.mp3").each do |file|
-        file = Pathname.new file
+      Dir.glob("#{root_dir}/**/*.mp3").each do |entry|
+        entry = Pathname.new entry
         begin
-          id3 = Mp3Info.open(file)
+          id3 = Mp3Info.open(entry)
           if query_type == :track
             if id3.hastag2? and id3.tag2.TIT2.downcase == query.downcase
-              found_file = id3.filename
+              found_entry = id3.filename
             elsif id3.hastag1? and id3.tag1.title.downcase == query.downcase
-              found_file = id3.filename
+              found_entry = id3.filename
             end
           elsif query_type == :album
             if id3.hastag2? and id3.tag2.TALB.downcase == query.downcase
-              found_file = id3.filename
+              found_entry = id3.filename
             elsif id3.hastag1? and id3.tag1.album.downcase == query.downcase
-              found_file = id3.filename
+              found_entry = id3.filename
             end
           elsif query_type == :artist
             if id3.hastag2? and id3.tag2.TPE1.downcase == query.downcase
-              found_file = id3.filename
+              found_entry = id3.filename
             elsif id3.hastag1? and id3.tag1.artist.downcase == query.downcase
-              found_file = id3.filename
+              found_entry = id3.filename
             end
           end
         rescue Mp3InfoError => e
-          @logger.warn "#{e.message} => #{file.relative_path_from(root_dir)}"
+          @logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
         end
       end
-      found_file
+      found_entry
     end
 
     def normalize(pathname)
-      pathname.basename.sub('-', ' ').sub('_', ' ').sub(/#{pathname.extname}$/, '') # poor man's normalization
+      pathname.basename.sub('-', ' ').sub('_', ' ').sub(/#{pathname.extname}$/, '')
     end
   end
 

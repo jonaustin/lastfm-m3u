@@ -21,35 +21,42 @@ describe Toptracks::Search do
     pending
   end
 
-  context "find by filename" do
-    it "should find a file if one exists" do
-      search.find('stepping stone', :track, :file).to_s.should match /stepping stone/
+  context "normalization" do
+    it "should find a filename with underscores in place of spaces" do
+      search.find('my way', :track, :file).to_s.should match /my_way/
     end
 
-    context "normalization" do
-      it "should find a filename with underscores in place of spaces" do
-        search.find('my way', :track, :file).to_s.should match /my_way/
+    it "should find a file with dashes in place of spaces" do
+      search.find('poa alpina', :track, :file).to_s.should match /poa-alpina/
+    end
+  end
+
+  context "find by filename" do
+    it "should continue when bad filename" do
+      path = "spec/support/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
+      Dir.stub_chain(:glob).and_return [path]
+      expect { search.find('tchaikovsky', :track, :file, false) }.to raise_error ArgumentError
+    end
+
+    context "track" do
+      it "should find a track if one exists" do
+        search.find('stepping stone', :track, :file).to_s.should match /stepping stone/
       end
-
-      it "should find a file with dashes in place of spaces" do
-        search.find('poa alpina', :track, :file).to_s.should match /poa-alpina/
+      it "should find flac" do
+        search.find('flac song', :track, :file, true).to_s.should match /flac song/
       end
+    end
 
-      it "should continue when bad filename" do
-        path = "spec/support/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
-        Dir.stub_chain(:glob).and_return [path]
-        expect { search.find('tchaikovsky', :track, :file, false) }.to raise_error ArgumentError
+    context "artist or album" do
+      it "should find an artist or album directory" do
+        search.find('biosphere', :artist, :file).to_s.should match /biosphere/
       end
+    end
 
-      context "prefer flac" do
-        it "should find flac" do
-          search.find('flac song', :track, :file, true).to_s.should match /flac song/
-        end
-
-        it "should search twice if no flac found" do
-          search.should_receive(:find_by_filename).twice
-          search.find('my way', :track, :file, true)
-        end
+    context "prefer flac" do
+      it "should search twice if no flac found" do
+        search.should_receive(:find_by_filename).twice
+        search.find('my way', :track, :file, true)
       end
     end
   end
