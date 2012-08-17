@@ -17,6 +17,7 @@ module Toptracks
       elsif file_or_id3 == :both or file_or_id3 == :id3
         file = find_by_id3(query, query_type)
       end
+      @logger.info "#{query} => #{file}"
       file
     end
 
@@ -82,6 +83,8 @@ module Toptracks
           end
         rescue Mp3InfoError => e
           @logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
+        rescue NoMethodError => e
+          @logger.warn "No tags found => #{entry.relative_path_from(root_dir)}"
         end
       end
       found_entry
