@@ -23,7 +23,7 @@ describe Toptracks::Search do
 
   context "normalization" do
     it "should find a filename with underscores in place of spaces" do
-      search.find('my way', :track, :file).to_s.should match /my_way/
+      search.find('my way', :track, :file).first.to_s.should match /my_way/
     end
 
     it "should find a file with dashes in place of spaces" do
@@ -32,6 +32,14 @@ describe Toptracks::Search do
   end
 
   context "find by filename" do
+    it "should be an array" do
+      search.find('my way').should be_an_instance_of(Array)
+    end
+
+    it "should return an Pathnames" do
+      search.find('stepping stone').first.should be_an_instance_of(Pathname)
+    end
+
     it "should continue when bad filename" do
       path = "spec/support/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
       Dir.stub_chain(:glob).and_return [path]
@@ -55,7 +63,7 @@ describe Toptracks::Search do
 
     context "prefer flac" do
       it "should search twice if no flac found" do
-        search.should_receive(:find_by_filename).twice
+        search.should_receive(:find_by_filename).twice.and_return []
         search.find('my way', :track, :file, true)
       end
     end
@@ -66,6 +74,10 @@ describe Toptracks::Search do
       search.find('id3v1-title', :track, :id3).should be_an_instance_of(Array)
     end
     
+    it "should return Pathnames" do
+      search.find('id3v1-title', :track, :id3).first.should be_an_instance_of(Pathname)
+    end
+
     context "track" do
       it "should find a tag" do
         search.find('id3v1-title', :track, :id3).first.to_s.should match /id3v1/i

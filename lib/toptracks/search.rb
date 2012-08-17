@@ -11,9 +11,10 @@ module Toptracks
     end
 
     def find(query, query_type=:track, file_or_id3=:both, prefer_flac=true)
+      files = []
       if file_or_id3 == :both or file_or_id3 == :file
         files = find_in_filesystem(query, query_type, :flac) if prefer_flac
-        files = find_in_filesystem(query, query_type, :mp3) unless files
+        files = find_in_filesystem(query, query_type, :mp3)  if files.empty?
       elsif file_or_id3 == :both or file_or_id3 == :id3
         files = find_by_id3(query, query_type)
       end
@@ -30,19 +31,22 @@ module Toptracks
     end
 
     def find_by_dir(name)
+      found_entries = []
       Dir.glob("#{root_dir}/**/*").each do |entry|
         entry = Pathname.new entry
-        return entry if entry.directory? and normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
+        found_entries << entry if entry.directory? and normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
       end
+      found_entries
     end
 
     def find_by_filename(name, ext)
+      found_entries = []
       Dir.glob("#{root_dir}/**/*.#{ext.to_s}").each do |entry|
         begin
           entry = Pathname.new entry
           if normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
             @logger.debug "#{name} => #{entry}"
-            return entry
+            found_entries << entry
           end
         rescue ArgumentError => e
           # for some reason it gets 'invalid byte sequence in UTF-8
@@ -51,7 +55,7 @@ module Toptracks
           @logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
         end
       end
-      false
+      found_entries
     end
 
     def find_by_id3(query, query_type)
