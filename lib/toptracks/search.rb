@@ -12,13 +12,13 @@ module Toptracks
 
     def find(query, query_type=:track, file_or_id3=:both, prefer_flac=true)
       if file_or_id3 == :both or file_or_id3 == :file
-        file = find_in_filesystem(query, query_type, :flac) if prefer_flac
-        file = find_in_filesystem(query, query_type, :mp3) unless file
+        files = find_in_filesystem(query, query_type, :flac) if prefer_flac
+        files = find_in_filesystem(query, query_type, :mp3) unless files
       elsif file_or_id3 == :both or file_or_id3 == :id3
-        file = find_by_id3(query, query_type)
+        files = find_by_id3(query, query_type)
       end
-      @logger.info "#{query} => #{file}"
-      file
+      @logger.info "#{query} => #{files}"
+      files
     end
 
     def find_in_filesystem(name, query_type, ext)
@@ -56,7 +56,7 @@ module Toptracks
 
     def find_by_id3(query, query_type)
       query = CGI.unescapeHTML(query)
-      found_entry = false
+      found_entries = []
       @logger.info query
       Dir.glob("#{root_dir}/**/*.mp3").each do |entry|
         entry = Pathname.new entry
@@ -64,21 +64,21 @@ module Toptracks
           id3 = Mp3Info.open(entry)
           if query_type == :track
             if id3.hastag2? and id3.tag2.TIT2.downcase == query.downcase
-              found_entry = id3.filename
+              found_entries << id3.filename
             elsif id3.hastag1? and id3.tag1.title.downcase == query.downcase
-              found_entry = id3.filename
+              found_entries << id3.filename
             end
           elsif query_type == :album
             if id3.hastag2? and id3.tag2.TALB.downcase == query.downcase
-              found_entry = id3.filename
+              found_entries << id3.filename
             elsif id3.hastag1? and id3.tag1.album.downcase == query.downcase
-              found_entry = id3.filename
+              found_entries << id3.filename
             end
           elsif query_type == :artist
             if id3.hastag2? and id3.tag2.TPE1.downcase == query.downcase
-              found_entry = id3.filename
+              found_entries << id3.filename
             elsif id3.hastag1? and id3.tag1.artist.downcase == query.downcase
-              found_entry = id3.filename
+              found_entries << id3.filename
             end
           end
         rescue Mp3InfoError => e
@@ -87,7 +87,7 @@ module Toptracks
           @logger.warn "No tags found => #{entry.relative_path_from(root_dir)}"
         end
       end
-      found_entry
+      found_entries
     end
 
     def normalize(pathname)
