@@ -62,12 +62,34 @@ describe Toptracks::Search do
   end
 
   context "find by id3" do
-    it "should find a tag" do
-      search.find('id3v1', :track, :id3).to_s.should match /id3v1/i
+    context "track" do
+      it "should find a tag" do
+        search.find('id3v1-title', :track, :id3).to_s.should match /id3v1/i
+      end
+
+      it "should find a id3v2 tag" do
+        search.find('id3v2-title', :track, :id3).to_s.should match /id3v2/i
+      end
     end
 
-    it "should find a id3v2 tag" do
-      search.find('id3v2', :track, :id3).to_s.should match /id3v2/i
+    context "album" do
+      it "should find a tag" do
+        search.find('id3v1-album', :album, :id3).to_s.should match /id3v1/i
+      end
+
+      it "should find a id3v2 tag" do
+        search.find('id3v2-album', :album, :id3).to_s.should match /id3v2/i
+      end
+    end
+
+    context "artist" do
+      it "should find a tag" do
+        search.find('id3v1-artist', :artist, :id3).to_s.should match /id3v1/i
+      end
+
+      it "should find a id3v2 tag" do
+        search.find('id3v2-artist', :artist, :id3).to_s.should match /id3v2/i
+      end
     end
   end
 
