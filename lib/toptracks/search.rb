@@ -15,10 +15,11 @@ module Toptracks
       if file_or_id3 == :both or file_or_id3 == :file
         files = find_in_filesystem(query, query_type, :flac) if prefer_flac
         files = find_in_filesystem(query, query_type, :mp3)  if files.empty?
-      elsif file_or_id3 == :both or file_or_id3 == :id3
+      end
+      if file_or_id3 == :both or file_or_id3 == :id3
         files = find_by_id3(query, query_type)
       end
-      $logger.info "#{query} => #{files}"
+      $logger.debug "#{query} => #{files}"
       files
     end
 
@@ -61,11 +62,14 @@ module Toptracks
     def find_by_id3(query, query_type)
       query = CGI.unescapeHTML(query)
       found_entries = []
-      $logger.info query
+      $logger.debug query
       Dir.glob("#{root_dir}/**/*.mp3").each do |entry|
         entry = Pathname.new entry
         begin
-          id3 = Mp3Info.open(entry)
+          id3 = false
+          Kernel.silence_warnings do # quiet ruby-mp3info's 'tag not full parsed' warnings
+            id3 = Mp3Info.open(entry)
+          end
           if query_type == :track
             if id3.hastag2? and id3.tag2.TIT2.downcase == query.downcase
               found_entries << id3.filename

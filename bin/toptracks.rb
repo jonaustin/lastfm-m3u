@@ -38,6 +38,15 @@ OptionParser.new do |opts|
     options.force = true
   end
 
+  opts.on('-d', '--debug [LEVEL]', 'Enable debugging output (Optional Level :: 0=all, 1=info,warn,error, 2=warn,error, 3=error)') do |level|
+    puts level
+    if level == true
+      options.debug = 0
+    else
+      options.debug = level.to_i
+    end
+  end
+
   opts.on_tail('-v', '--version', 'Show Toptracks version') do
     puts "Toptracks v#{Toptracks::VERSION}"
     exit
@@ -47,7 +56,6 @@ OptionParser.new do |opts|
     puts opts
     exit
   end
-
 end.parse!
 
 unless options.artists
@@ -55,9 +63,14 @@ unless options.artists
   exit
 end
 
+if options.debug
+  $logger.level = options.debug
+  exit
+end
+
 options.artists.each do |artist|
-  search = Toptracks::Search.new('/home/jon/music')
-  search.find_for_artist(artist)
+  search = Toptracks::Search.new('/home/jon/music/trance')
+  search.find(artist, :artist).each {|a| puts a }
 
 
   #lfartist.fetch_tracks

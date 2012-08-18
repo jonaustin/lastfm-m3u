@@ -15,4 +15,5 @@ require 'toptracks/search'
 
 module Toptracks
   $logger = ANSI::Logger.new(STDOUT)
+  $logger.level = 3 # errors only
 end
