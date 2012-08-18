@@ -51,12 +51,14 @@ OptionParser.new do |opts|
 end.parse!
 
 unless options.artists
-  raise ArgumentError, "Please provide at least one artist (-a Elvis)"
+  $logger.error "Please provide at least one artist (-a Elvis)"
+  exit
 end
 
 options.artists.each do |artist|
   search = Toptracks::Search.new('/home/jon/music')
-  search.artist.new(artist).top_tracks.each { |track| puts track.name }
+  search.find_for_artist(artist)
+
 
   #lfartist.fetch_tracks
   #puts lfartist.tracks[0].methods

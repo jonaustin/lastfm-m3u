@@ -18,7 +18,7 @@ module Toptracks
       elsif file_or_id3 == :both or file_or_id3 == :id3
         files = find_by_id3(query, query_type)
       end
-      @logger.info "#{query} => #{files}"
+      $logger.info "#{query} => #{files}"
       files
     end
 
@@ -45,14 +45,14 @@ module Toptracks
         begin
           entry = Pathname.new entry
           if normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
-            @logger.debug "#{name} => #{entry}"
+            $logger.debug "#{name} => #{entry}"
             found_entries << entry
           end
         rescue ArgumentError => e
           # for some reason it gets 'invalid byte sequence in UTF-8
           # even though replacing ascii below with utf-8 causes nothing to be replaced.
           entry = Pathname entry.to_s.encode('ascii', invalid: :replace, undef: :replace, replace: '??')
-          @logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
+          $logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
         end
       end
       found_entries
@@ -61,7 +61,7 @@ module Toptracks
     def find_by_id3(query, query_type)
       query = CGI.unescapeHTML(query)
       found_entries = []
-      @logger.info query
+      $logger.info query
       Dir.glob("#{root_dir}/**/*.mp3").each do |entry|
         entry = Pathname.new entry
         begin
@@ -86,9 +86,9 @@ module Toptracks
             end
           end
         rescue Mp3InfoError => e
-          @logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
+          $logger.warn "#{e.message} => #{entry.relative_path_from(root_dir)}"
         rescue NoMethodError => e
-          @logger.warn "No tags found => #{entry.relative_path_from(root_dir)}"
+          $logger.warn "No tags found => #{entry.relative_path_from(root_dir)}"
         end
       end
       found_entries

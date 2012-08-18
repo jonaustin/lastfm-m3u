@@ -12,3 +12,7 @@ require 'ansi/logger'
 require 'toptracks/base'
 require 'toptracks/models'
 require 'toptracks/search'
+
+module Toptracks
+  $logger = ANSI::Logger.new(STDOUT)
+end
