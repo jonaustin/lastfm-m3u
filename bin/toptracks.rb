@@ -26,8 +26,8 @@ OptionParser.new do |opts|
   end
 
   # directory
-  opts.on("-d DIR", "directory") do |directory|
-    options.dir = directory
+  opts.on("-d DIR", "--directory DIR", "music directory") do |directory|
+    options.directory = directory
   end
 
   opts.on('-o', '--output FILENAME', 'Write m3u to FILENAME') do |fn| # writes single m3u when multiple artists
@@ -42,12 +42,11 @@ OptionParser.new do |opts|
     options.force = true
   end
 
-  opts.on('-d', '--debug [LEVEL]', 'Enable debugging output (Optional Level :: 0=all, 1=info,warn,error, 2=warn,error, 3=error)') do |level|
-    puts level
-    if level == true
-      options.debug = 0
-    else
+  opts.on('--debug [LEVEL]', 'Enable debugging output (Optional Level :: 0=all, 1=info,warn,error, 2=warn,error, 3=error)') do |level|
+    if level
       options.debug = level.to_i
+    else
+      options.debug = 0
     end
   end
 
@@ -69,21 +68,20 @@ end
 
 if options.debug
   $logger.level = options.debug
-  exit
 end
 
 options.artists.each do |artist|
-  search = Toptracks::Search.new('/home/jon/music/trance')
-  search.find(artist, :artist, :id3).each do |track|
+  if options.directory
+    lastfm = Toptracks::Lastfm.new(artist, options.directory)
+  else
+    lastfm = Toptracks::Lastfm.new(artist)
+  end
+  lastfm.toptracks.each do |track|
       if options.path
-        search.m3u.add_file(track.relative_path_from options.path)
+        lastfm.m3u.add_file(track.relative_path_from options.path)
       else
-        search.m3u.add_file(track)
+        lastfm.m3u.add_file(track)
       end
     end
-  search.m3u.write(File.join(search.m3u_path, "#{artist}.m3u"))
-
-  #lfartist.fetch_tracks
-  #puts lfartist.tracks[0].methods
-  #lfartist.tracks.each { |t| puts "#{t.playcount} - #{t.name}" }
+  lastfm.m3u.write(File.join(search.m3u_path, "#{artist}.m3u"))
 end
