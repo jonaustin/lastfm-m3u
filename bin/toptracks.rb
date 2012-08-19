@@ -2,9 +2,11 @@
 require 'rubygems'
 require 'optparse'
 require 'ostruct'
+require 'highline/import'
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'toptracks'
+require 'toptracks/util'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
@@ -76,12 +78,13 @@ options.artists.each do |artist|
   else
     lastfm = Toptracks::Lastfm.new(artist)
   end
-  lastfm.toptracks.each do |track|
-      if options.path
-        lastfm.m3u.add_file(track.relative_path_from options.path)
-      else
-        lastfm.m3u.add_file(track)
-      end
+  lastfm.toptracks.each do |track, track_set|
+    track = Toptracks::Util.choose_track(track, track_set)   
+    if options.path
+      lastfm.m3u.add_file(track.relative_path_from options.path)
+    else
+      lastfm.m3u.add_file(track)
     end
-  lastfm.m3u.write(File.join(search.m3u_path, "#{artist}.m3u"))
+  end
+  lastfm.m3u.write(File.join(lastfm.m3u_path, "#{artist}.m3u"))
 end
