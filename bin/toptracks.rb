@@ -40,6 +40,10 @@ OptionParser.new do |opts|
     options.path = Pathname path
   end
 
+  opts.on('-l', '--limit NUM', 'Specify limit of tracks to fetch from Last.fm (defaults to all)') do |limit|
+    options.limit = limit
+  end
+
   opts.on('-f', '--force', 'Overwrite existing output file(s)') do
     options.force = true
   end
@@ -73,13 +77,16 @@ if options.debug
 end
 
 options.artists.each do |artist|
-  if options.directory
-    lastfm = Toptracks::Lastfm.new(artist, options.directory)
-  else
-    lastfm = Toptracks::Lastfm.new(artist)
-  end
+  lastfm = Toptracks::Lastfm.new(artist)
+  lastfm.root_dir = options.directory if options.directory
+  lastfm.limit = options.limit.to_i if options.limit
+
   lastfm.toptracks.each do |track, track_set|
-    track = Toptracks::Util.choose_track(track, track_set)   
+    if track_set.size > 1
+      track = Toptracks::Util.choose_track(track, track_set)
+    else
+      track = track_set.first
+    end
     if options.path
       lastfm.m3u.add_file(track.relative_path_from options.path)
     else
