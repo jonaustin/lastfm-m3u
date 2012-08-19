@@ -10,7 +10,6 @@ require 'rainbow'
 require 'ansi/logger'
 
 require 'toptracks/base'
-require 'toptracks/models'
 require 'toptracks/search'
 
 module Toptracks
