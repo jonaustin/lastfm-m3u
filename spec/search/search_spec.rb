@@ -4,7 +4,7 @@ require 'ostruct'
 describe Toptracks::Search do
   before { ANSI::Logger.any_instance.stub(:warn => false, :info => false, :debug => false) } # quiet logging
 
-  let(:music_dir) { File.expand_path("../support/fixtures/music", __FILE__) }
+  let(:music_dir) { File.expand_path("../../support/fixtures/music", __FILE__) }
   let(:search) { Toptracks::Search.new(music_dir) }
 
   context "root dir" do
@@ -73,7 +73,7 @@ describe Toptracks::Search do
     it "should return an array" do
       search.find('id3v1-title', :track, :id3).should be_an_instance_of(Array)
     end
-    
+
     it "should return Pathnames" do
       search.find('id3v1-title', :track, :id3).first.should be_an_instance_of(Pathname)
     end

@@ -1,6 +1,6 @@
 module Toptracks
-  require 'pathname'
   require 'toptracks'
+  require 'pathname'
 
   class Search < Base
     attr_accessor :root_dir
@@ -11,14 +11,15 @@ module Toptracks
     end
 
     def find(query, query_type=:track, file_or_id3=:both, prefer_flac=true)
-      files = []
+      flac_files = mp3_files = id3_files = []
       if file_or_id3 == :both or file_or_id3 == :file
-        files = find_in_filesystem(query, query_type, :flac) if prefer_flac
-        files = find_in_filesystem(query, query_type, :mp3)  if files.empty?
+        flac_files = find_in_filesystem(query, query_type, :flac) if prefer_flac
+        mp3_files = find_in_filesystem(query, query_type, :mp3)  if flac_files.empty?
       end
       if file_or_id3 == :both or file_or_id3 == :id3
-        files = find_by_id3(query, query_type)
+        id3_files = find_by_id3(query, query_type)
       end
+      files = (flac_files + mp3_files + id3_files).uniq
       $logger.debug "#{query} => #{files}"
       files
     end
@@ -66,10 +67,7 @@ module Toptracks
       Dir.glob("#{root_dir}/**/*.mp3").each do |entry|
         entry = Pathname.new entry
         begin
-          id3 = false
-          Kernel.silence_warnings do # quiet ruby-mp3info's 'tag not full parsed' warnings
-            id3 = Mp3Info.open(entry)
-          end
+          id3 = Mp3Info.open(entry)
           if query_type == :track
             if id3.hastag2? and id3.tag2.TIT2.downcase == query.downcase
               found_entries << id3.filename

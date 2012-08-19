@@ -10,7 +10,7 @@ require 'rainbow'
 require 'ansi/logger'
 
 require 'toptracks/base'
-require 'toptracks/search'
+require 'toptracks/search/files'
 
 module Toptracks
   $logger = ANSI::Logger.new(STDOUT)
