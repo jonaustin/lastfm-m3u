@@ -14,24 +14,26 @@ module Toptracks
     end
 
     def find(query, query_type=:track, file_or_id3=:both, prefer_flac=true)
-      flac_files = mp3_files = id3_files = []
+      files = id3_files = []
       if file_or_id3 == :both or file_or_id3 == :file
-        flac_files = find_in_filesystem(query, query_type, :flac) if prefer_flac
-        mp3_files = find_in_filesystem(query, query_type, :mp3)  if flac_files.empty?
+        files = find_in_filesystem(query, query_type)
       end
       if file_or_id3 == :both or file_or_id3 == :id3
         id3_files = find_by_id3(query, query_type)
       end
-      files = (flac_files + mp3_files + id3_files).uniq
+      files = (files + id3_files).uniq
+      if prefer_flac and ((flac_files = trim_non_flac(files)) != [])
+        files = flac_files
+      end
       $logger.debug "#{query} => #{files}"
       files
     end
 
-    def find_in_filesystem(name, query_type, ext)
+    def find_in_filesystem(name, query_type)
       if query_type == :artist or query_type == :album
         find_by_dir(name)
       else
-        find_by_filename(name, ext)
+        find_by_filename(name)
       end
     end
 
@@ -44,9 +46,9 @@ module Toptracks
       found_entries
     end
 
-    def find_by_filename(name, ext)
+    def find_by_filename(name)
       found_entries = []
-      Dir.glob("#{root_dir}/**/*.#{ext.to_s}").each do |entry|
+      Dir.glob("#{root_dir}/**/*.{mp3,flac}").each do |entry|
         begin
           entry = Pathname.new entry
           if normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
@@ -101,6 +103,10 @@ module Toptracks
 
     def normalize(pathname)
       pathname.basename.sub('-', ' ').sub('_', ' ').sub(/#{pathname.extname}$/, '')
+    end
+
+    def trim_non_flac(pathnames)
+      pathnames.select{|pn| pn.to_s =~ /\.flac$/}
     end
   end
 

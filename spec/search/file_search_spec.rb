@@ -62,9 +62,8 @@ describe Toptracks::FileSearch do
     end
 
     context "prefer flac" do
-      it "should search twice if no flac found" do
-        file_search.should_receive(:find_by_filename).twice.and_return []
-        file_search.find('my way', :track, :file, true)
+      it "should only return flac files if any found" do
+        pending
       end
     end
   end
