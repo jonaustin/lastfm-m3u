@@ -18,6 +18,7 @@ module Toptracks
       top_tracks = @artist.top_tracks
       self.limit ||= top_tracks.size
       top_tracks[0..limit-1].each do |track|
+        track.name = CGI.unescapeHTML(track.name)
         tracks[track.name] = search.find(track.name)
       end
       tracks

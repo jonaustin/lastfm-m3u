@@ -21,7 +21,7 @@ module Toptracks
       if file_or_id3 == :both or file_or_id3 == :id3
         id3_files = find_by_id3(query, query_type)
       end
-      files = (files + id3_files).uniq
+      files = (files + id3_files).sort.uniq
       if prefer_flac and ((flac_files = trim_non_flac(files)) != [])
         files = flac_files
       end

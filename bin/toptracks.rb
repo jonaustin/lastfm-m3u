@@ -36,7 +36,7 @@ OptionParser.new do |opts|
     options.out_file = fn
   end
 
-  opts.on('-p', '--path PATH', 'Specify path to use for m3u file entries (i.e. MPD requires a path relative to its music directory (and no leading slash))') do |path|
+  opts.on('-p', '--path PATH', 'Specify path to use for m3u file entries (e.g. MPD requires a path relative to its music directory - i.e. -d /home/user/music/Biosphere -p /home/user/music where the second one is MPD\'s root)') do |path|
     options.path = Pathname path
   end
 
@@ -77,11 +77,17 @@ if options.debug
 end
 
 options.artists.each do |artist|
+  not_found = []
   lastfm = Toptracks::Lastfm.new(artist)
   lastfm.root_dir = options.directory if options.directory
   lastfm.limit = options.limit.to_i if options.limit
 
   lastfm.toptracks.each do |track, track_set|
+    if track_set.empty?
+      not_found << track
+      next
+    end
+
     if track_set.size > 1
       track = Toptracks::Util.choose_track(track, track_set)
     else
@@ -94,4 +100,11 @@ options.artists.each do |artist|
     end
   end
   lastfm.m3u.write(File.join(lastfm.m3u_path, "#{artist}.m3u"))
+
+  unless not_found.empty?
+    puts artist.color(:green)
+    puts "===============".color(:blue)
+    puts "Not Found:".color(:red)
+    not_found.each {|track| puts "#{track}".color(:yellow) }
+  end
 end
