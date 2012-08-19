@@ -34,6 +34,10 @@ OptionParser.new do |opts|
     options.out_file = fn
   end
 
+  opts.on('-p', '--path PATH', 'Specify path to use for m3u file entries (i.e. MPD requires a path relative to its music directory (and no leading slash))') do |path|
+    options.path = Pathname path
+  end
+
   opts.on('-f', '--force', 'Overwrite existing output file(s)') do
     options.force = true
   end
@@ -70,8 +74,14 @@ end
 
 options.artists.each do |artist|
   search = Toptracks::Search.new('/home/jon/music/trance')
-  search.find(artist, :artist).each {|a| puts a }
-
+  search.find(artist, :artist, :id3).each do |track|
+      if options.path
+        search.m3u.add_file(track.relative_path_from options.path)
+      else
+        search.m3u.add_file(track)
+      end
+    end
+  search.m3u.write(File.join(search.m3u_path, "#{artist}.m3u"))
 
   #lfartist.fetch_tracks
   #puts lfartist.tracks[0].methods
