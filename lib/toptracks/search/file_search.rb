@@ -3,6 +3,9 @@ module Toptracks
   require 'pathname'
 
   class Search < Base
+  end
+
+  class FileSearch < Search
     attr_accessor :root_dir
 
     def initialize(root_dir)
