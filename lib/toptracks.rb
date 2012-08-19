@@ -10,6 +10,7 @@ require 'rainbow'
 require 'ansi/logger'
 
 require 'toptracks/base'
+require 'toptracks/lastfm'
 require 'toptracks/search/file_search'
 
 module Toptracks
