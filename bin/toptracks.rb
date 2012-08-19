@@ -81,8 +81,9 @@ options.artists.each do |artist|
   lastfm = Toptracks::Lastfm.new(artist)
   lastfm.root_dir = options.directory if options.directory
   lastfm.limit = options.limit.to_i if options.limit
+  tracks = lastfm.artist.top_tracks
 
-  lastfm.toptracks.each do |track, track_set|
+  lastfm.find_tracks(tracks).each do |track, track_set|
     if track_set.empty?
       not_found << track
       next
@@ -102,8 +103,11 @@ options.artists.each do |artist|
   lastfm.m3u.write(File.join(lastfm.m3u_path, "#{artist}.m3u"))
 
   unless not_found.empty?
-    puts artist.color(:green)
-    puts "===============".color(:blue)
+    output_size = artist.length+10
+    puts ("="*output_size).color(:blue)
+    puts artist.center(output_size).color(:green)
+    puts ("="*output_size).color(:blue)
+    puts
     puts "Not Found:".color(:red)
     not_found.each {|track| puts "#{track}".color(:yellow) }
   end
