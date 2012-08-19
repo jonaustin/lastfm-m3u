@@ -63,7 +63,7 @@ OptionParser.new do |opts|
 end.parse!
 
 unless options.artists
-  $logger.error "Please provide at least one artist (-a Elvis)"
+  $logger.error "Please provide at least one artist (-a Elvis), see help for usage (-h)"
   exit
 end
 
