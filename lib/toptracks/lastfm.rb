@@ -10,7 +10,7 @@ module Toptracks
       super()
     end
 
-    def find_tracks(tracks, search_type = :file)
+    def find_tracks(tracks, search_type = :file, progressbar = nil)
       found_tracks = {}
       if search_type == :file
         search = Toptracks::FileSearch.new(root_dir)
@@ -19,6 +19,7 @@ module Toptracks
       tracks[0..limit-1].each do |track|
         track.name = CGI.unescapeHTML(track.name)
         found_tracks[track.name] = search.find(track.name)
+        progressbar.increment if progressbar
       end
       found_tracks
     end

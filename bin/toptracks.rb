@@ -3,6 +3,7 @@ require 'rubygems'
 require 'optparse'
 require 'ostruct'
 require 'highline/import'
+require 'ruby-progressbar'
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'toptracks'
@@ -44,9 +45,13 @@ OptionParser.new do |opts|
     options.limit = limit
   end
 
-  opts.on('-f', '--force', 'Overwrite existing output file(s)') do
-    options.force = true
+  opts.on('-f', '--not-found', 'Show not found') do
+    options.not_found = true
   end
+
+  #opts.on('-f', '--force', 'Overwrite existing output file(s)') do
+    #options.force = true
+  #end
 
   opts.on('--debug [LEVEL]', 'Enable debugging output (Optional Level :: 0=all, 1=info,warn,error, 2=warn,error, 3=error)') do |level|
     if level
@@ -83,7 +88,9 @@ options.artists.each do |artist|
   lastfm.limit = options.limit.to_i if options.limit
   tracks = lastfm.artist.top_tracks
 
-  lastfm.find_tracks(tracks).each do |track, track_set|
+  puts
+  progressbar = ProgressBar.create(starting_at: 0, total: tracks.size, format: "%a".color(:cyan) + "|".color(:magenta) + "%B".color(:green) + "|".color(:magenta) +  "%p%%".color(:cyan))
+  lastfm.find_tracks(tracks, :file, progressbar).each do |track, track_set|
     if track_set.empty?
       not_found << track
       next
@@ -100,15 +107,19 @@ options.artists.each do |artist|
       lastfm.m3u.add_file(track)
     end
   end
+  puts
+  output_size = artist.length+10
+  puts ("="*output_size).color(:blue)
+  puts artist.center(output_size).color(:green)
+  puts "#{tracks.size - not_found.size} tracks found".center(output_size).color(:green)
+  puts ("="*output_size).color(:blue)
+
   lastfm.m3u.write(File.join(lastfm.m3u_path, "#{artist}.m3u"))
 
-  unless not_found.empty?
-    output_size = artist.length+10
-    puts ("="*output_size).color(:blue)
-    puts artist.center(output_size).color(:green)
-    puts ("="*output_size).color(:blue)
+  unless not_found.empty? or options.not_found.nil?
     puts
     puts "Not Found:".color(:red)
     not_found.each {|track| puts "#{track}".color(:yellow) }
   end
+
 end

@@ -26,4 +26,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'ansi', '~> 1.4.3' # color logging
   gem.add_dependency 'm3uzi', '~> 0.5.1'
   gem.add_dependency 'highline', '~> 1.6.13'
+  gem.add_dependency 'ruby-progressbar', '~> 1.0.0'
 end
