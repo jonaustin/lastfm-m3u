@@ -12,6 +12,7 @@ module Toptracks
             return track
           end
         end
+        menu.choice "none" do return nil end
       end
     end
   end

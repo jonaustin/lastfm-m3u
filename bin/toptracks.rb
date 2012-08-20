@@ -97,22 +97,27 @@ options.artists.each do |artist|
     end
 
     if track_set.size > 1
-      track = Toptracks::Util.choose_track(track, track_set)
+      unless found_track = Toptracks::Util.choose_track(track, track_set)
+        not_found << track
+        next
+      end
+      puts
     else
-      track = track_set.first
+      found_track = track_set.first
     end
     if options.path
-      lastfm.m3u.add_file(track.relative_path_from options.path)
+      lastfm.m3u.add_file(found_track.relative_path_from options.path)
     else
-      lastfm.m3u.add_file(track)
+      lastfm.m3u.add_file(found_track)
     end
   end
   puts
+  margin = 10
   output_size = artist.length+10
-  puts ("="*output_size).color(:blue)
-  puts artist.center(output_size).color(:green)
-  puts "#{tracks.size - not_found.size} tracks found".center(output_size).color(:green)
-  puts ("="*output_size).color(:blue)
+  puts " "*margin + ("="*output_size).color(:blue)
+  puts artist.center(output_size+margin*2).color(:green)
+  puts " "*margin + "#{tracks.size - not_found.size} tracks found".center(output_size).color(:green)
+  puts " "*margin + ("="*output_size).color(:blue)
 
   lastfm.m3u.write(File.join(lastfm.m3u_path, "#{artist}.m3u"))
 
