@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Toptracks::FileSearch do
+describe LastfmTracks::FileSearch do
   before { ANSI::Logger.any_instance.stub(:warn => false, :info => false, :debug => false) } # quiet logging
 
   let(:music_dir) { File.expand_path("../../support/fixtures/music", __FILE__) }
-  let(:file_search) { Toptracks::FileSearch.new(music_dir) }
+  let(:file_search) { LastfmTracks::FileSearch.new(music_dir) }
 
   context "root dir" do
     it "should set the root dir" do

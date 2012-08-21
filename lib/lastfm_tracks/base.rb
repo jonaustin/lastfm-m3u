@@ -1,4 +1,4 @@
-module Toptracks
+module LastfmTracks
   class Base
     attr_accessor :m3u, :m3u_path
 

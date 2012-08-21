@@ -1,4 +1,4 @@
-module Toptracks
+module LastfmTracks
   class Lastfm < Base
     attr_accessor :artist, :root_dir, :limit, :tracks
 
@@ -13,7 +13,7 @@ module Toptracks
     def find_tracks(tracks, search_type = :file, progressbar = nil)
       found_tracks = {}
       if search_type == :file
-        search = Toptracks::FileSearch.new(root_dir)
+        search = LastfmTracks::FileSearch.new(root_dir)
       end
       self.limit ||= tracks.size
       tracks[0..limit-1].each do |track|

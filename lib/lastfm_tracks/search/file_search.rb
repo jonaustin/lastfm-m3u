@@ -1,5 +1,5 @@
-module Toptracks
-  require 'toptracks'
+module LastfmTracks
+  require 'lastfm_tracks'
   require 'pathname'
 
   class Search < Base

@@ -1,4 +1,4 @@
-module Toptracks
+module LastfmTracks
   module Util
     def self.choose_track(track, track_set)
       choose do |menu|
