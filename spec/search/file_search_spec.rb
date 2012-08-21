@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'ostruct'
 
 describe Toptracks::FileSearch do
   before { ANSI::Logger.any_instance.stub(:warn => false, :info => false, :debug => false) } # quiet logging
