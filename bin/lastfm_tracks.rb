@@ -23,6 +23,16 @@ OptionParser.new do |opts|
   opts.separator ""
   opts.separator "Options:"
 
+  # Type of search
+  types = %w[file id3 both]
+  type_aliases = { "f" => "file", "i" => "id3", "b" => "both" }
+  type_list = (type_aliases.keys + types).join(',')
+  opts.on("--type TYPE", "-t TYPE", types, type_aliases, "Select search type",
+          "  (#{type_list})") do |type|
+    options.type = type.to_sym
+  end
+  options.type = :both if options.type.blank? or options.type.nil?
+
   # List of artists
   opts.on("-a x,y,z", Array, "list of artists") do |artists|
     options.artists = artists
@@ -42,7 +52,7 @@ OptionParser.new do |opts|
   end
 
   opts.on('-l', '--limit NUM', 'Specify limit of tracks to fetch from Last.fm (defaults to all)') do |limit|
-    options.limit = limit
+    options.limit = limit.to_i
   end
 
   opts.on('-f', '--not-found', 'Show not found') do
@@ -85,12 +95,13 @@ options.artists.each do |artist|
   not_found = []
   lastfm = LastfmTracks::Lastfm.new(artist)
   lastfm.root_dir = options.directory if options.directory
-  lastfm.limit = options.limit.to_i if options.limit
+  lastfm.limit = options.limit if options.limit
   tracks = lastfm.artist.top_tracks
 
   puts
-  progressbar = ProgressBar.create(starting_at: 0, total: tracks.size, format: "%a".color(:cyan) + "|".color(:magenta) + "%B".color(:green) + "|".color(:magenta) +  "%p%%".color(:cyan))
-  lastfm.find_tracks(tracks, :file, progressbar).each do |track, track_set|
+  num_tracks = (options.limit.nil? ? tracks.size : options.limit)
+  progressbar = ProgressBar.create(starting_at: 0, total: num_tracks, format: "%a".color(:cyan) + "|".color(:magenta) + "%B".color(:green) + "|".color(:magenta) +  "%p%%".color(:cyan))
+  lastfm.find_tracks(tracks, options.type, progressbar).each do |track, track_set|
     if track_set.empty?
       not_found << track
       next
@@ -116,7 +127,7 @@ options.artists.each do |artist|
   output_size = artist.length+10
   puts " "*margin + ("="*output_size).color(:blue)
   puts artist.center(output_size+margin*2).color(:green)
-  puts " "*margin + "#{tracks.size - not_found.size} tracks found".center(output_size).color(:green)
+  puts " "*margin + "#{num_tracks - not_found.size} of #{num_tracks} tracks found".center(output_size).color(:green)
   puts " "*margin + ("="*output_size).color(:blue)
 
   lastfm.m3u.write(File.join(lastfm.m3u_path, "#{artist}.m3u"))

@@ -14,13 +14,11 @@ module LastfmTracks
       begin
         raise InvalidSearchType unless SEARCH_TYPES.include?(search_type)
       rescue InvalidSearchType
-        $logger.error("Invalid Search Type, use one of #{SEARCH_TYPES.join(',')}")
+        $logger.error("Invalid Search Type '#{search_type}', use one of #{SEARCH_TYPES.join(',')}")
         exit
       end
       found_tracks = {}
-      if search_type == :file
-        search = LastfmTracks::FileSearch.new(root_dir)
-      end
+      search = LastfmTracks::FileSearch.new(root_dir)
       self.limit ||= tracks.size
       tracks[0..limit-1].each do |track|
         track.name = CGI.unescapeHTML(track.name)

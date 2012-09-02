@@ -35,8 +35,9 @@ describe LastfmTracks::FileSearch do
       file_search.find('my way').should be_an_instance_of(Array)
     end
 
-    it "should return an Pathnames" do
-      file_search.find('stepping stone').first.should be_an_instance_of(Pathname)
+    it "should return a filename" do
+      filename = file_search.find('stepping stone')
+      (Pathname.new music_dir).join('sid_vicious/05. stepping stone.mp3').should exist
     end
 
     it "should continue when bad filename" do
@@ -72,8 +73,13 @@ describe LastfmTracks::FileSearch do
       file_search.find('id3v1-title', :track, :id3).should be_an_instance_of(Array)
     end
 
-    it "should return Pathnames" do
-      file_search.find('id3v1-title', :track, :id3).first.should be_an_instance_of(Pathname)
+    it "should return filename" do
+      file_search.find('id3v1-title', :track, :id3).first.should == "#{music_dir}/id3v1.mp3"
+    end
+
+    it "should return title, album, artist, filename" do
+      pending "returning filenames for now to ease sorting/uniq when both filenames and id3s searched"
+      file_search.find('id3v1-title', :track, :id3).first.should == "id3v1-title, id3v1-album, id3v1-artist, #{music_dir}/id3v1.mp3"
     end
 
     context "track" do
