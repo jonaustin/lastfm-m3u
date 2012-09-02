@@ -2,16 +2,10 @@ require 'spec_helper'
 require 'ostruct'
 
 describe LastfmTracks::Lastfm do
-  context "find_tracks" do
-    it "should call Filesearch.find" do
-      track = OpenStruct.new(name: 'track')
-      search = double()
-      search.stub(:find)
-      LastfmTracks::FileSearch.stub(:new).and_return search
-      search.should_receive(:find).once
-      lf = LastfmTracks::Lastfm.new('artist', '/')
-      lf.find_tracks([track])
-    end
+  it "should return expected results" do
+    track = OpenStruct.new(name: 'Poa Alpina')
+    lf = LastfmTracks::Lastfm.new('Biosphere', music_dir)
+    found = lf.find_tracks([track])
+    found.should == { track.name => ["#{music_dir}/biosphere/poa-alpina.mp3"] }
   end
-
 end

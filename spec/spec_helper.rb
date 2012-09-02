@@ -6,3 +6,7 @@ $:.unshift(File.expand_path('../lib', __FILE__))
 
 require 'rspec'
 require 'lastfm_tracks'
+
+def music_dir
+  File.expand_path("../support/fixtures/music/", __FILE__)
+end
