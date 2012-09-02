@@ -16,4 +16,5 @@ require 'lastfm_tracks/search/file_search'
 module LastfmTracks
   $logger = ANSI::Logger.new(STDOUT)
   $logger.level = 3 # errors only
+  SEARCH_TYPES = [:file, :id3, :both]
 end
