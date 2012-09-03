@@ -22,7 +22,7 @@ module LastfmTracks
       self.limit ||= tracks.size
       tracks[0..limit-1].each do |track|
         track.name = CGI.unescapeHTML(track.name)
-        found_tracks[track.name] = search.find(track.name, :track, search_type)
+        found_tracks[track.name] = search.find(track.name, {search_type: search_type})
         progressbar.increment if progressbar
       end
       found_tracks

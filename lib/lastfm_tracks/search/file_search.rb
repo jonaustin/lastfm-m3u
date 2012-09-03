@@ -13,8 +13,12 @@ module LastfmTracks
       super()
     end
 
-    def find(query, query_type=:track, file_or_id3=:both, prefer_flac=true)
+    def find(query, options={})
+      query_type  = options[:query_type] || :track
+      file_or_id3 = options[:search_type] || :both
+      prefer_flac = options[:prefer_flac] || true
       files = id3_files = []
+
       if file_or_id3 == :both or file_or_id3 == :file
         files = find_in_filesystem(query, query_type)
       end

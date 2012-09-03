@@ -21,11 +21,11 @@ describe LastfmTracks::FileSearch do
 
   context "normalization" do
     it "should find a filename with underscores in place of spaces" do
-      file_search.find('my way', :track, :file).first.to_s.should match /my_way/
+      file_search.find('my way', {search_type: :file}).first.to_s.should match /my_way/
     end
 
     it "should find a file with dashes in place of spaces" do
-      file_search.find('poa alpina', :track, :file).to_s.should match /poa-alpina/
+      file_search.find('poa alpina', {search_type: :file}).to_s.should match /poa-alpina/
     end
   end
 
@@ -42,21 +42,21 @@ describe LastfmTracks::FileSearch do
     it "should continue when bad filename" do
       path = "spec/support/fixtures/music/11\ Tchaikovsky\ -\ S$'\351'r$'\351'nade\ m$'\351'lancoliq.mp3".force_encoding('utf-8')
       Dir.stub_chain(:glob).and_return [path]
-      expect { file_search.find('tchaikovsky', :track, :file, false) }.to raise_error ArgumentError
+      expect { file_search.find('tchaikovsky', {search_type: :file, prefer_flac: false}) }.to raise_error ArgumentError
     end
 
     context "track" do
       it "should find a track if one exists" do
-        file_search.find('stepping stone', :track, :file).to_s.should match /stepping stone/
+        file_search.find('stepping stone', {search_type: :file}).to_s.should match /stepping stone/
       end
       it "should find flac" do
-        file_search.find('flac song', :track, :file, true).to_s.should match /flac song/
+        file_search.find('flac song', {search_type: :file}).to_s.should match /flac song/
       end
     end
 
     context "artist or album" do
       it "should find an artist or album directory" do
-        file_search.find('biosphere', :artist, :file).to_s.should match /biosphere/
+        file_search.find('biosphere', {query_type: :artist, search_type: :file}).to_s.should match /biosphere/
       end
     end
 
@@ -69,45 +69,45 @@ describe LastfmTracks::FileSearch do
 
   context "find by id3" do
     it "should return an array" do
-      file_search.find('id3v1-title', :track, :id3).should be_an_instance_of(Array)
+      file_search.find('id3v1-title', {search_type: :id3}).should be_an_instance_of(Array)
     end
 
     it "should return filename" do
-      file_search.find('id3v1-title', :track, :id3).first.should == "#{music_dir}/id3v1.mp3"
+      file_search.find('id3v1-title', {search_type: :id3}).first.should == "#{music_dir}/id3v1.mp3"
     end
 
     it "should return title, album, artist, filename" do
       pending "returning filenames for now to ease sorting/uniq when both filenames and id3s searched"
-      file_search.find('id3v1-title', :track, :id3).first.should == "id3v1-title, id3v1-album, id3v1-artist, #{music_dir}/id3v1.mp3"
+      file_search.find('id3v1-title', {search_type: :id3}).first.should == "id3v1-title, id3v1-album, id3v1-artist, #{music_dir}/id3v1.mp3"
     end
 
     context "track" do
       it "should find a tag" do
-        file_search.find('id3v1-title', :track, :id3).first.to_s.should match /id3v1/i
+        file_search.find('id3v1-title', {search_type: :id3}).first.to_s.should match /id3v1/i
       end
 
       it "should find a id3v2 tag" do
-        file_search.find('id3v2-title', :track, :id3).first.to_s.should match /id3v2/i
+        file_search.find('id3v2-title', {search_type: :id3}).first.to_s.should match /id3v2/i
       end
     end
 
     context "album" do
       it "should find a tag" do
-        file_search.find('id3v1-album', :album, :id3).first.to_s.should match /id3v1/i
+        file_search.find('id3v1-album', {query_type: :album, search_type: :id3}).first.to_s.should match /id3v1/i
       end
 
       it "should find a id3v2 tag" do
-        file_search.find('id3v2-album', :album, :id3).first.to_s.should match /id3v2/i
+        file_search.find('id3v2-album', {query_type: :album, search_type: :id3}).first.to_s.should match /id3v2/i
       end
     end
 
     context "artist" do
       it "should find a tag" do
-        file_search.find('id3v1-artist', :artist, :id3).first.to_s.should match /id3v1/i
+        file_search.find('id3v1-artist', {query_type: :artist, search_type: :id3}).first.to_s.should match /id3v1/i
       end
 
       it "should find a id3v2 tag" do
-        file_search.find('id3v2-artist', :artist, :id3).first.to_s.should match /id3v2/i
+        file_search.find('id3v2-artist', {query_type: :artist, search_type: :id3}).first.to_s.should match /id3v2/i
       end
     end
 
