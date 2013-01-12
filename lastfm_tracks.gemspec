@@ -27,4 +27,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'm3uzi',             '~> 0.5.1'
   gem.add_dependency 'highline',          '~> 1.6.13'
   gem.add_dependency 'ruby-progressbar',  '~> 1.0.0'
+  gem.add_dependency 'hallon',            '~> 0.18'
 end
