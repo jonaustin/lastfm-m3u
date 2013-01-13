@@ -8,7 +8,6 @@ module LastfmTracks
 
       def initialize(root_dir)
         @root_dir = Pathname root_dir
-        super()
       end
 
       def find(query, options={})
@@ -50,7 +49,7 @@ module LastfmTracks
 
       def find_by_filename(name)
         found_entries = []
-        Dir.glob("#{root_dir}/**/*.{mp3,flac}").each do |entry|
+        found_files('mp3','flac').each do |entry|
           begin
             entry = Pathname.new entry
             if normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
@@ -67,13 +66,17 @@ module LastfmTracks
         found_entries
       end
 
+      def found_files(*exts)
+        Dir.glob("#{root_dir}/**/*.{#{exts.join(',')}}")
+      end
+
       def find_by_id3(query, query_type)
         query = CGI.unescapeHTML(query)
         found_entries = []
-        $logger.debug query
-        Dir.glob("#{root_dir}/**/*.mp3").each do |entry|
+        #$logger.debug query
+        found_files('mp3').each do |mp3|
           begin
-            id3 = Mp3Info.open(entry)
+            id3 = Mp3Info.open(mp3)
             if query_type == :track
               if id3.hastag2? and id3.tag2.TIT2.downcase == query.downcase
                 #found_entries << [id3.tag2.TIT2, id3.tag2.TALB, id3.tag2.TPE1, id3.filename].join(', ')
@@ -100,9 +103,9 @@ module LastfmTracks
               end
             end
           rescue Mp3InfoError => e
-            $logger.warn "#{e.message} => #{(Pathname.new entry).relative_path_from(root_dir)}"
+            $logger.warn "#{e.message} => #{(Pathname.new mp3).relative_path_from(root_dir)}"
           rescue NoMethodError => e
-            $logger.warn "No tags found => #{(Pathname.new entry).relative_path_from(root_dir)}"
+            $logger.warn "No tags found => #{(Pathname.new mp3).relative_path_from(root_dir)}"
           end
         end
         found_entries
