@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe LastfmTracks::FileSearch do
+describe LastfmTracks::Search::File do
   before { ANSI::Logger.any_instance.stub(:warn => false, :info => false, :debug => false) } # quiet logging
 
-  let(:file_search) { LastfmTracks::FileSearch.new(music_dir) }
+  let(:file_search) { LastfmTracks::Search::File.new(music_dir) }
 
   context "root dir" do
     it "should set the root dir" do

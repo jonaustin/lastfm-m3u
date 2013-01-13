@@ -1,0 +1,2 @@
+module LastfmTracks
+end

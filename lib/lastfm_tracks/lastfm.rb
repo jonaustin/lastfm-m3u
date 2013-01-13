@@ -18,7 +18,7 @@ module LastfmTracks
         exit
       end
       found_tracks = {}
-      search = LastfmTracks::FileSearch.new(root_dir)
+      search = LastfmTracks::Search::File.new(root_dir)
       self.limit ||= tracks.size
       tracks[0..limit-1].each do |track|
         track.name = CGI.unescapeHTML(track.name)
