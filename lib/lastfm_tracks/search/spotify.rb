@@ -1,8 +1,7 @@
-require 'spec_helper'
+module LastfmTracks
+  require 'lastfm_tracks'
+  require 'hallon'
 
-context LastfmTracks::Spotify do
-  before { ANSI::Logger.any_instance.stub(:warn => false, :info => false, :debug => false) } # quiet logging
-
-  
-  
+  class Search::Spotify
+  end
 end
