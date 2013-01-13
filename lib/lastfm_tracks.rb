@@ -12,6 +12,7 @@ require 'ansi/logger'
 require 'lastfm_tracks/base'
 require 'lastfm_tracks/lastfm'
 require 'lastfm_tracks/search/file'
+require 'lastfm_tracks/search/spotify'
 
 module LastfmTracks
   $logger = ANSI::Logger.new(STDOUT)
