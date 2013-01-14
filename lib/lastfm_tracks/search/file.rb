@@ -39,12 +39,7 @@ module LastfmTracks
       end
 
       def find_by_dir(name)
-        found_entries = []
-        Dir.glob("#{root_dir}/**/*").each do |entry|
-          entry = Pathname.new entry
-          found_entries << entry.to_s if entry.directory? and normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
-        end
-        found_entries
+        Dir.glob("#{@root_dir}/**/*#{name}*/")
       end
 
       def find_by_filename(name)
