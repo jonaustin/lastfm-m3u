@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'guard-rspec',         '~> 2.3'
   gem.add_development_dependency 'guard-ctags-bundler', '~> 0.1.3'
   gem.add_development_dependency 'rb-inotify',          '~> 0.8.8'
+  gem.add_development_dependency 'libnotify',          '~> 0.8.0'
   gem.add_development_dependency 'debugger',            '~> 1.2'
   gem.add_development_dependency 'simplecov',           '~> 0.6'
 
