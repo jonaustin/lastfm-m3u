@@ -55,7 +55,7 @@ module LastfmM3u
       Dir.glob("#{root_dir}/**/*.{mp3,flac}").each do |entry|
         begin
           entry = Pathname.new entry
-          if normalize(entry).to_s =~ /.*#{Regexp.escape name}.*/i
+          if normalize(entry) =~ /.*#{Regexp.escape name}.*/i
             $logger.debug "#{name} => #{entry}"
             found_entries << entry.to_s
           end
@@ -111,7 +111,7 @@ module LastfmM3u
     end
 
     def normalize(pathname)
-      pathname.basename.sub('-', ' ').sub('_', ' ').sub(/#{pathname.extname}$/, '')
+      pathname.basename.to_s.gsub('-', ' ').gsub('_', ' ').sub(/#{pathname.extname}$/, '')
     end
 
     def trim_non_flac(pathnames)
