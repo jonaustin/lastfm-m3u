@@ -1,4 +1,4 @@
-module LastfmTracks
+module LastfmM3u
   class Lastfm < Base
     attr_accessor :artist, :root_dir, :limit, :tracks
 
@@ -18,7 +18,7 @@ module LastfmTracks
         exit
       end
       found_tracks = {}
-      search = LastfmTracks::FileSearch.new(root_dir)
+      search = LastfmM3u::FileSearch.new(root_dir)
       self.limit ||= tracks.size
       tracks[0..limit-1].each do |track|
         track.name = CGI.unescapeHTML(track.name)

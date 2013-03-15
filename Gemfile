@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in lastfm_tracks.gemspec
+# Specify your gem's dependencies in lastfm_m3u.gemspec
 gemspec

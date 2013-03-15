@@ -1,4 +1,4 @@
-module LastfmTracks
+module LastfmM3u
   class Base
     attr_accessor :m3u, :m3u_path
 

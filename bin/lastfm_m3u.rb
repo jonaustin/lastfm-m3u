@@ -6,19 +6,19 @@ require 'highline/import'
 require 'ruby-progressbar'
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
-require 'lastfm_tracks'
-require 'lastfm_tracks/util'
+require 'lastfm_m3u'
+require 'lastfm_m3u/util'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
-  opts.banner = "LastfmTracks Playlist Creator"
-  opts.define_head "Usage: lastfm_tracks [options]"
+  opts.banner = "LastfmM3u Playlist Creator"
+  opts.define_head "Usage: lastfm_m3u [options]"
   opts.separator ""
   opts.separator "Examples:"
-  #opts.separator "  lastfm_tracks # auto-search config-music_dir mp3 id3 tags for all unique artists, query last.fm for top tracks and create m3us for each artist from available track files"
-  opts.separator "  lastfm_tracks -a Biosphere"
-  opts.separator "  lastfm_tracks -a Biosphere -d ~/music/Biosphere"
-  opts.separator "  lastfm_tracks -a Biosphere -o biosphere.m3u"
+  #opts.separator "  lastfm_m3u # auto-search config-music_dir mp3 id3 tags for all unique artists, query last.fm for top tracks and create m3us for each artist from available track files"
+  opts.separator "  lastfm_m3u -a Biosphere"
+  opts.separator "  lastfm_m3u -a Biosphere -d ~/music/Biosphere"
+  opts.separator "  lastfm_m3u -a Biosphere -o biosphere.m3u"
   opts.separator ""
   opts.separator ""
   opts.separator "Options:"
@@ -71,8 +71,8 @@ OptionParser.new do |opts|
     end
   end
 
-  opts.on_tail('-v', '--version', 'Show LastfmTracks version') do
-    puts "LastfmTracks v#{LastfmTracks::VERSION}"
+  opts.on_tail('-v', '--version', 'Show LastfmM3u version') do
+    puts "LastfmM3u v#{LastfmM3u::VERSION}"
     exit
   end
 
@@ -93,7 +93,7 @@ end
 
 options.artists.each do |artist|
   not_found = []
-  lastfm = LastfmTracks::Lastfm.new(artist)
+  lastfm = LastfmM3u::Lastfm.new(artist)
   lastfm.root_dir = options.directory if options.directory
   lastfm.limit = options.limit if options.limit
   tracks = lastfm.artist.top_tracks
@@ -108,7 +108,7 @@ options.artists.each do |artist|
     end
 
     if track_set.size > 1
-      unless found_track = LastfmTracks::Util.choose_track(track, track_set)
+      unless found_track = LastfmM3u::Util.choose_track(track, track_set)
         not_found << track
         next
       end
