@@ -35,8 +35,8 @@ describe LastfmM3u::FileSearch do
     end
 
     it "should return a filename" do
-      filename = file_search.find('stepping stone')
-      (Pathname.new music_dir).join('sid_vicious/05. stepping stone.mp3').should exist
+      filename = file_search.find('stepping_stone')
+      (Pathname.new music_dir).join('sid_vicious/05._stepping_stone.mp3').should exist
     end
 
     it "should continue when bad filename" do
@@ -47,10 +47,11 @@ describe LastfmM3u::FileSearch do
 
     context "track" do
       it "should find a track if one exists" do
-        file_search.find('stepping stone', {search_type: :file}).to_s.should match /stepping stone/
+        file_search.find('stepping stone', {search_type: :file}).to_s.should match /stepping_stone/
       end
+
       it "should find flac" do
-        file_search.find('flac song', {search_type: :file}).to_s.should match /flac song/
+        file_search.find('flac song', {search_type: :file}).to_s.should match /flac_song/
       end
     end
 
