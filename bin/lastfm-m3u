@@ -11,13 +11,17 @@ require 'lastfm-m3u/util'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
-  opts.banner = "LastfmM3u Playlist Creator"
-  opts.define_head "Usage: lastfm-m3u [options]"
+  opts.banner = "LastfmM3u Playlist Creator".color(:blue)
+  opts.define_head "To get started: lastfm-m3u --init".color(:green)
+  opts.separator ""
+  opts.separator "Usage: lastfm-m3u [options]".color(:yellow)
+  opts.separator "Note: defaults to filename-only search. id3/both search is more thorough, but much slower"
   opts.separator ""
   opts.separator "Examples:"
   #opts.separator "  lastfm-m3u # auto-search config-music_dir mp3 id3 tags for all unique artists, query last.fm for top tracks and create m3us for each artist from available track files"
   opts.separator '  lastfm-m3u -a "Biosphere,Brian Eno"'
   opts.separator "  lastfm-m3u -a Biosphere"
+  opts.separator "  lastfm-m3u -a Biosphere -t both"
   opts.separator "  lastfm-m3u -a Biosphere -d ~/music/Biosphere"
   #opts.separator "  lastfm-m3u -a Biosphere -o biosphere.m3u"
   opts.separator ""
@@ -28,11 +32,15 @@ OptionParser.new do |opts|
   types = %w[file id3 both]
   type_aliases = { "f" => "file", "i" => "id3", "b" => "both" }
   type_list = (type_aliases.keys + types).join(',')
-  opts.on("--type TYPE", "-t TYPE", types, type_aliases, "Select search type",
-          "  (#{type_list})") do |type|
+  opts.on("--type TYPE", "-t TYPE", types, type_aliases, "Select search type", "  (#{type_list})") do |type|
     options.type = type.to_sym
   end
-  options.type = :both if options.type.blank? or options.type.nil?
+  options.type = :file if options.type.blank? or options.type.nil?
+
+  # init config
+  opts.on('-i', '--init', "init lastfm API access config") do |opt|
+    options.init = true
+  end
 
   # List of artists
   opts.on('-a "x,y,z"', Array, "one or more artists separated by commas (enclose with quotes if any spaces)") do |artists|
@@ -84,8 +92,13 @@ OptionParser.new do |opts|
   end
 end.parse!
 
+if options.init
+  lastfm = LastfmM3u::Lastfm.new('')
+  exit
+end
+
 unless options.artists
-  $logger.error "Please provide at least one artist (-a Elvis), see help for usage (-h)"
+  puts "Please provide at least one artist (-a Elvis).".color(:red) + "  See".color(:green) + " --help".color(:yellow) + " for usage or".color(:green) + " --init".color(:yellow) + " to get started".color(:green)
   exit
 end
 
@@ -100,6 +113,8 @@ options.artists.each do |artist|
   lastfm.limit = options.limit if options.limit
   tracks = lastfm.artist.top_tracks
 
+  puts
+  puts "Searching filesystem with method: ".color(:green) + options.type.to_s.capitalize.color(:yellow)
   puts
   num_tracks = (options.limit.nil? ? tracks.size : options.limit)
   progressbar = ProgressBar.create(starting_at: 0, total: num_tracks, format: "%a".color(:cyan) + "|".color(:magenta) + "%B".color(:green) + "|".color(:magenta) +  "%p%%".color(:cyan))

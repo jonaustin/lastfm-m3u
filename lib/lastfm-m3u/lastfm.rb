@@ -8,6 +8,7 @@ module LastfmM3u
       FileUtils.mkdir_p "#{ENV['HOME']}/.config"
       config_path = "#{ENV['HOME']}/.config/lastfm-m3u.yml"
       unless File.exists? config_path
+        puts "Copying empty config file to #{config_path}...".color(:green)
         FileUtils.cp File.join(File.dirname(__FILE__), '../../config/lastfm.yml.dist'), config_path
       end
       config_hash = YAML.load_file(config_path)
@@ -18,7 +19,7 @@ module LastfmM3u
         @limit = nil
         super()
       else
-        $logger.error "\nPlease add your api_key and api_secret to:\n  #{config_path}\nGet your keys at http://www.last.fm/api/account"
+        puts "Please add your api_key and api_secret to:\n  #{config_path}\nGet your keys at http://www.last.fm/api/account".color(:yellow)
         exit
       end
     end
