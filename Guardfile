@@ -1,5 +1,4 @@
-# A sample Guardfile
-# More info at https://github.com/guard/guard#readme
+notification :terminal_notifier
 
 guard 'rspec', :version => 2, :all_after_pass => false, :all_on_start => false, :cli => "--color --format nested --fail-fast" do
   watch(%r{^spec/.+_spec\.rb$})
