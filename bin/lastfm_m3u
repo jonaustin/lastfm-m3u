@@ -16,9 +16,10 @@ OptionParser.new do |opts|
   opts.separator ""
   opts.separator "Examples:"
   #opts.separator "  lastfm_m3u # auto-search config-music_dir mp3 id3 tags for all unique artists, query last.fm for top tracks and create m3us for each artist from available track files"
+  opts.separator '  lastfm_m3u -a "Biosphere,Brian Eno"'
   opts.separator "  lastfm_m3u -a Biosphere"
   opts.separator "  lastfm_m3u -a Biosphere -d ~/music/Biosphere"
-  opts.separator "  lastfm_m3u -a Biosphere -o biosphere.m3u"
+  #opts.separator "  lastfm_m3u -a Biosphere -o biosphere.m3u"
   opts.separator ""
   opts.separator ""
   opts.separator "Options:"
@@ -34,18 +35,19 @@ OptionParser.new do |opts|
   options.type = :both if options.type.blank? or options.type.nil?
 
   # List of artists
-  opts.on("-a x,y,z", Array, "list of artists") do |artists|
+  opts.on('-a "x,y,z"', Array, "one or more artists separated by commas (enclose with quotes if any spaces)") do |artists|
     options.artists = artists
   end
 
   # directory
+  options.directory = Dir.pwd
   opts.on("-d DIR", "--directory DIR", "music directory") do |directory|
     options.directory = directory
   end
 
-  opts.on('-o', '--output FILENAME', 'Write m3u to FILENAME') do |fn| # writes single m3u when multiple artists
-    options.out_file = fn
-  end
+  #opts.on('-o', '--output FILENAME', 'Write m3u to FILENAME') do |fn| # writes single m3u when multiple artists
+    #options.out_file = fn
+  #end
 
   opts.on('-p', '--path PATH', 'Specify path to use for m3u file entries (e.g. MPD requires a path relative to its music directory - i.e. -d /home/user/music/Biosphere -p /home/user/music where the second one is MPD\'s root)') do |path|
     options.path = Pathname path

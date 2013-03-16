@@ -4,7 +4,7 @@ require File.expand_path('../lib/lastfm_m3u/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Jon Austin"]
   gem.email         = ["jon.i.austin@gmail.com"]
-  gem.summary       = %q{Create m3u playlists of top artist tracks according to last.fm}
+  gem.summary       = %q{Create m3u playlists of top artist tracks according to lastfm}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)

@@ -1,29 +1,32 @@
-# LastfmM3u
+# Lastfm Top tracks Playlist creator
 
-TODO: Write a gem description
+Searches given directory for mp3/flac files that match lastfm top tracks for given artist.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'lastfm_m3u'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install lastfm_m3u
+$ gem install lastfm_m3u
 
 ## Usage
 
-TODO: Write usage instructions here
+$ lastfm_m3u -h
 
-## Contributing
+LastfmM3u Playlist Creator
+Usage: lastfm_m3u [options]
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+Examples:
+  lastfm_m3u -a "Biosphere,Brian Eno"
+  lastfm_m3u -a Biosphere
+  lastfm_m3u -a Biosphere -d ~/music/Biosphere
+
+
+Options:
+    -t, --type TYPE                  Select search type
+                                       (f,i,b,file,id3,both)
+    -a "x,y,z"                       one or more artists separated by commas (enclose with quotes if any spaces)
+    -d, --directory DIR              music directory
+    -p, --path PATH                  Specify path to use for m3u file entries (e.g. MPD requires a path relative to its music directory - i.e. -d /home/user/music/Biosphere -p /home/user/music where the second one is MPD's root)
+    -l, --limit NUM                  Specify limit of tracks to fetch from Last.fm (defaults to all)
+    -f, --not-found                  Show not found
+        --debug [LEVEL]              Enable debugging output (Optional Level :: 0=all, 1=info,warn,error, 2=warn,error, 3=error)
+    -v, --version                    Show LastfmM3u version
+    -h, --help                       Show this help message
