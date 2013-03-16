@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/lastfm_m3u/version', __FILE__)
+require File.expand_path('../lib/lastfm-m3u/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Jon Austin"]
@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "lastfm_m3u"
+  gem.name          = "lastfm-m3u"
   gem.require_paths = ["lib"]
   gem.version       = LastfmM3u::VERSION
 

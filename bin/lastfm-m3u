@@ -6,20 +6,20 @@ require 'highline/import'
 require 'ruby-progressbar'
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
-require 'lastfm_m3u'
-require 'lastfm_m3u/util'
+require 'lastfm-m3u'
+require 'lastfm-m3u/util'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
   opts.banner = "LastfmM3u Playlist Creator"
-  opts.define_head "Usage: lastfm_m3u [options]"
+  opts.define_head "Usage: lastfm-m3u [options]"
   opts.separator ""
   opts.separator "Examples:"
-  #opts.separator "  lastfm_m3u # auto-search config-music_dir mp3 id3 tags for all unique artists, query last.fm for top tracks and create m3us for each artist from available track files"
-  opts.separator '  lastfm_m3u -a "Biosphere,Brian Eno"'
-  opts.separator "  lastfm_m3u -a Biosphere"
-  opts.separator "  lastfm_m3u -a Biosphere -d ~/music/Biosphere"
-  #opts.separator "  lastfm_m3u -a Biosphere -o biosphere.m3u"
+  #opts.separator "  lastfm-m3u # auto-search config-music_dir mp3 id3 tags for all unique artists, query last.fm for top tracks and create m3us for each artist from available track files"
+  opts.separator '  lastfm-m3u -a "Biosphere,Brian Eno"'
+  opts.separator "  lastfm-m3u -a Biosphere"
+  opts.separator "  lastfm-m3u -a Biosphere -d ~/music/Biosphere"
+  #opts.separator "  lastfm-m3u -a Biosphere -o biosphere.m3u"
   opts.separator ""
   opts.separator ""
   opts.separator "Options:"

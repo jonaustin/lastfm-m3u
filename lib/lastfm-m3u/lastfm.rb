@@ -6,7 +6,7 @@ module LastfmM3u
 
     def initialize(artist, root_dir='/home/jon/music/trance')
       FileUtils.mkdir_p "#{ENV['HOME']}/.config"
-      config_path = "#{ENV['HOME']}/.config/lastfm_m3u.yml"
+      config_path = "#{ENV['HOME']}/.config/lastfm-m3u.yml"
       unless File.exists? config_path
         FileUtils.cp File.join(File.dirname(__FILE__), '../../config/lastfm.yml.dist'), config_path
       end

@@ -4,19 +4,19 @@ Searches given directory for mp3/flac files that match lastfm top tracks for giv
 
 ## Installation
 
-$ gem install lastfm_m3u
+$ gem install lastfm-m3u
 
 ## Usage
 
-$ lastfm_m3u -h
+$ lastfm-m3u -h
 
 LastfmM3u Playlist Creator
-Usage: lastfm_m3u [options]
+Usage: lastfm-m3u [options]
 
 Examples:
-  lastfm_m3u -a "Biosphere,Brian Eno"
-  lastfm_m3u -a Biosphere
-  lastfm_m3u -a Biosphere -d ~/music/Biosphere
+  lastfm-m3u -a "Biosphere,Brian Eno"
+  lastfm-m3u -a Biosphere
+  lastfm-m3u -a Biosphere -d ~/music/Biosphere
 
 
 Options:
