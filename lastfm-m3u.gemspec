@@ -5,7 +5,8 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Jon Austin"]
   gem.email         = ["jon.i.austin@gmail.com"]
   gem.summary       = %q{Create m3u playlists of top artist tracks according to lastfm}
-  gem.homepage      = ""
+  gem.description   = gem.summary
+  gem.homepage      = "https://github.com/jonaustin/lastfm-m3u"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
