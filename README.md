@@ -35,3 +35,7 @@ Searches given directory for mp3/flac files that match lastfm top tracks for giv
             --debug [LEVEL]              Enable debugging output (Optional Level :: 0=all, 1=info,warn,error, 2=warn,error, 3=error)
         -v, --version                    Show LastfmM3u version
         -h, --help                       Show this help message
+
+## Demo
+
+![Demo](doc/lastfm-m3u-demo.gif)
