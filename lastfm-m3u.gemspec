@@ -15,19 +15,19 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = LastfmM3u::VERSION
 
-  gem.add_development_dependency 'rspec',                   '~> 2.12.0'
-  gem.add_development_dependency 'guard-rspec',             '~> 1.2.1'
-  gem.add_development_dependency 'guard-ctags-bundler',     '~> 0.1.3'
+  gem.add_development_dependency 'rspec',                   '~> 2.13.0'
+  gem.add_development_dependency 'guard-rspec',             '~> 2.5.1'
+  gem.add_development_dependency 'guard-ctags-bundler',     '~> 0.1.6'
   gem.add_development_dependency 'terminal-notifier-guard', '~> 1.5.3'
   gem.add_development_dependency 'rb-fsevent',              '~> 0.9'
-  gem.add_development_dependency 'debugger',                '~> 1.2.0'
-  gem.add_development_dependency 'simplecov',               '~> 0.6.4'
+  gem.add_development_dependency 'debugger',                '~> 1.5.0'
+  gem.add_development_dependency 'simplecov',               '~> 0.7.1'
 
-  gem.add_dependency 'rockstar',          '~> 0.6.4'
-  gem.add_dependency 'ruby-mp3info',      '~> 0.7.1'
+  gem.add_dependency 'rockstar',          '~> 0.7.1'
+  gem.add_dependency 'ruby-mp3info',      '~> 0.8.0'
   gem.add_dependency 'rainbow',           '~> 1.1.4'
   gem.add_dependency 'ansi',              '~> 1.4.3' # color logging
   gem.add_dependency 'm3uzi',             '~> 0.5.1'
-  gem.add_dependency 'highline',          '~> 1.6.13'
-  gem.add_dependency 'ruby-progressbar',  '~> 1.0.0'
+  gem.add_dependency 'highline',          '~> 1.6.16'
+  gem.add_dependency 'ruby-progressbar',  '~> 1.0.2'
 end
