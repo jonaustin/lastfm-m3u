@@ -17,20 +17,23 @@ module LastfmM3u
       query_type  = options[:query_type] || :track
       file_or_id3 = options[:search_type] || :both
       prefer_flac = options[:prefer_flac] || true
-      files = id3_files = []
 
-      if file_or_id3 == :both or file_or_id3 == :file
-        files = find_in_filesystem(query, query_type)
-      end
-      if file_or_id3 == :both or file_or_id3 == :id3
-        id3_files = find_by_id3(query, query_type)
-      end
-      files = (files + id3_files).sort.uniq
-      if prefer_flac and ((flac_files = trim_non_flac(files)) != [])
+      files = find_unique_files(query, query_type, file_or_id3)
+      if prefer_flac && !(flac_files=trim_non_flac(files)).empty?
         files = flac_files
       end
       $logger.debug "#{query} => #{files}"
       files
+    end
+
+
+    private
+
+    def find_unique_files(query, query_type, file_or_id3)
+      files = id3_files = []
+      files = find_in_filesystem(query, query_type) if [:both, :file].include? file_or_id3
+      id3_files = find_by_id3(query, query_type) if [:both, :id3].include? file_or_id3
+      (files + id3_files).sort.uniq
     end
 
     def find_in_filesystem(name, query_type)
@@ -77,13 +80,7 @@ module LastfmM3u
         begin
           id3 = Mp3Info.open(entry)
           if query_type == :track
-            if id3.hastag2? and id3.tag2.TIT2.downcase == query.downcase
-              #found_entries << [id3.tag2.TIT2, id3.tag2.TALB, id3.tag2.TPE1, id3.filename].join(', ')
-              found_entries << id3.filename
-            elsif id3.hastag1? and id3.tag1.title.downcase == query.downcase
-              #found_entries << [id3.tag1.title, id3.tag1.album, id3.tag1.artist, id3.filename].join(', ')
-              found_entries << id3.filename
-            end
+            found_entries << id3.filename if id3_title_found?(id3, query)
           elsif query_type == :album
             if id3.hastag2? and id3.tag2.TALB.downcase == query.downcase
               #found_entries << [id3.tag2.TIT2, id3.tag2.TALB, id3.tag2.TPE1, id3.filename].join(', ')
@@ -108,6 +105,20 @@ module LastfmM3u
         end
       end
       found_entries
+    end
+
+    def id3_title_found?(id3, query)
+      id3_tag2_title_found?(id3, query) || id3_tag1_title_found?(id3, query)
+    end
+
+    def id3_tag2_title_found?(id3, query)
+      id3.hastag2? && id3.tag2.TIT2.downcase == query.downcase
+      #found_entries << [id3.tag2.TIT2, id3.tag2.TALB, id3.tag2.TPE1, id3.filename].join(', ')
+    end
+
+    def id3_tag1_title_found?(id3, query)
+      id3.hastag1? and id3.tag1.title.downcase == query.downcase
+      #found_entries << [id3.tag1.title, id3.tag1.album, id3.tag1.artist, id3.filename].join(', ')
     end
 
     def normalize(pathname)
