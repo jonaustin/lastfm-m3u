@@ -78,14 +78,8 @@ module LastfmM3u
       $logger.debug query
       Dir.glob("#{root_dir}/**/*.mp3").each do |entry|
         begin
-          id3 = Mp3Info.open(entry)
-          if query_type == :track
-            found_entries << id3.filename if id3_title_found?(id3, query)
-          elsif query_type == :album
-            found_entries << id3.filename if id3_album_found?(id3, query)
-          elsif query_type == :artist
-            found_entries << id3.filename if id3_artist_found?(id3, query)
-          end
+          id3 = Mp3InfoExt.new(query, query_type, entry)
+          found_entries << id3.filename if id3.found?
         rescue Mp3InfoError => e
           $logger.warn "#{e.message} => #{(Pathname.new entry).relative_path_from(root_dir)}"
         rescue NoMethodError => e
@@ -93,51 +87,6 @@ module LastfmM3u
         end
       end
       found_entries
-    end
-
-    # ARTIST
-    def id3_artist_found?(id3, query)
-      id3_tag2_artist_found?(id3, query) || id3_tag1_artist_found?(id3, query)
-    end
-
-    def id3_tag2_artist_found?(id3, query)
-      id3.hastag2? && id3.tag2.TPE1.downcase == query.downcase
-      #found_entries << [id3.tag2.TIT2, id3.tag2.TALB, id3.tag2.TPE1, id3.filename].join(', ')
-    end
-
-    def id3_tag1_artist_found?(id3, query)
-      id3.hastag1? && id3.tag1.artist.downcase == query.downcase
-      #found_entries << [id3.tag1.title, id3.tag1.album, id3.tag1.artist, id3.filename].join(', ')
-    end
-
-    # ALBUM
-    def id3_album_found?(id3, query)
-      id3_tag2_album_found?(id3, query) || id3_tag1_album_found?(id3, query)
-    end
-
-    def id3_tag2_album_found?(id3,query)
-      id3.hastag2? && id3.tag2.TALB.downcase == query.downcase
-      #found_entries << [id3.tag2.TIT2, id3.tag2.TALB, id3.tag2.TPE1, id3.filename].join(', ')
-    end
-
-    def id3_tag1_album_found?(id3,query)
-      id3.hastag1? && id3.tag1.album.downcase == query.downcase
-      #found_entries << [id3.tag1.title, id3.tag1.album, id3.tag1.artist, id3.filename].join(', ')
-    end
-
-    # TITLE
-    def id3_title_found?(id3, query)
-      id3_tag2_title_found?(id3, query) || id3_tag1_title_found?(id3, query)
-    end
-
-    def id3_tag2_title_found?(id3, query)
-      id3.hastag2? && id3.tag2.TIT2.downcase == query.downcase
-      #found_entries << [id3.tag2.TIT2, id3.tag2.TALB, id3.tag2.TPE1, id3.filename].join(', ')
-    end
-
-    def id3_tag1_title_found?(id3, query)
-      id3.hastag1? and id3.tag1.title.downcase == query.downcase
-      #found_entries << [id3.tag1.title, id3.tag1.album, id3.tag1.artist, id3.filename].join(', ')
     end
 
     def normalize(pathname)

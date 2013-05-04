@@ -4,7 +4,6 @@ require 'pathname'
 require 'lastfm-m3u/version'
 
 require 'rockstar'
-require 'mp3info'
 require 'm3uzi'
 require 'rainbow'
 require 'ansi/logger'
@@ -12,6 +11,7 @@ require 'ansi/logger'
 require 'lastfm-m3u/base'
 require 'lastfm-m3u/lastfm'
 require 'lastfm-m3u/search/file_search'
+require 'lastfm-m3u/mp3_info_ext'
 
 module LastfmM3u
   $logger = ANSI::Logger.new(STDOUT)
