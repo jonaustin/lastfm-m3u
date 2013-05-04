@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'terminal-notifier-guard', '~> 1.5.3'
   gem.add_development_dependency 'rb-fsevent',              '~> 0.9'
   gem.add_development_dependency 'debugger',                '~> 1.5.0'
+  gem.add_development_dependency 'pry-debugger',            '~> 0.2'
   gem.add_development_dependency 'simplecov',               '~> 0.7.1'
 
   gem.add_dependency 'rockstar',          '~> 0.7.1'
