@@ -111,14 +111,13 @@ options.artists.each do |artist|
   lastfm = LastfmM3u::Lastfm.new(artist)
   lastfm.root_dir = options.directory if options.directory
   lastfm.limit = options.limit if options.limit
-  tracks = lastfm.artist.top_tracks
 
   puts
   puts "Searching filesystem with method: ".color(:green) + options.type.to_s.capitalize.color(:yellow)
   puts
-  num_tracks = (options.limit.nil? ? tracks.size : options.limit)
+  num_tracks = (options.limit.nil? ? lastfm.tracks.size : options.limit)
   progressbar = ProgressBar.create(starting_at: 0, total: num_tracks, format: "%a".color(:cyan) + "|".color(:magenta) + "%B".color(:green) + "|".color(:magenta) +  "%p%%".color(:cyan))
-  lastfm.find_tracks(tracks, options.type, progressbar).each do |track, track_set|
+  lastfm.find_tracks(options.type, progressbar).each do |track, track_set|
     if track_set.empty?
       not_found << track
       next

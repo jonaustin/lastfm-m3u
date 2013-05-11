@@ -15,6 +15,7 @@ module LastfmM3u
       Rockstar.lastfm = config_hash
       unless config_hash.values.any? {|v| v==''}
         @artist = Rockstar::Artist.new artist
+        @tracks = @artist.top_tracks
         @root_dir = root_dir
         @limit = nil
         super()
@@ -24,7 +25,7 @@ module LastfmM3u
       end
     end
 
-    def find_tracks(tracks, search_type = :file, progressbar = nil)
+    def find_tracks(search_type = :file, progressbar = nil)
       begin
         raise InvalidSearchType unless SEARCH_TYPES.include?(search_type)
       rescue InvalidSearchType
