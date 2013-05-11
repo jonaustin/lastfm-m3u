@@ -15,7 +15,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = LastfmM3u::VERSION
 
-  gem.add_development_dependency 'rspec',                   '~> 2.13.0'
   gem.add_development_dependency 'guard-rspec',             '~> 2.5.1'
   gem.add_development_dependency 'guard-ctags-bundler',     '~> 0.1.6'
   gem.add_development_dependency 'terminal-notifier-guard', '~> 1.5.3'
