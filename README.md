@@ -1,5 +1,7 @@
 [![Code Climate](https://codeclimate.com/github/jonaustin/lastfm-m3u.png)](https://codeclimate.com/github/jonaustin/lastfm-m3u)
 [![Build Status](https://travis-ci.org/jonaustin/lastfm-m3u.png?branch=master)](https://travis-ci.org/jonaustin/lastfm-m3u)
+[![Coverage Status](https://coveralls.io/repos/jonaustin/lastfm-m3u/badge.png)](https://coveralls.io/r/jonaustin/lastfm-m3u)
+[![Dependency Status](https://gemnasium.com/jonaustin/lastfm-m3u.png)](https://gemnasium.com/jonaustin/lastfm-m3u)
 
 # Lastfm Top tracks Playlist creator
 
