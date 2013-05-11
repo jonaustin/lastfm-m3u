@@ -1,4 +1,5 @@
 [![Code Climate](https://codeclimate.com/github/jonaustin/lastfm-m3u.png)](https://codeclimate.com/github/jonaustin/lastfm-m3u)
+[![Build Status](https://travis-ci.org/jonaustin/lastfm-m3u.png?branch=master)](https://travis-ci.org/jonaustin/lastfm-m3u)
 
 # Lastfm Top tracks Playlist creator
 
