@@ -15,10 +15,6 @@ describe LastfmM3u::FileSearch do
     end
   end
 
-  context "find" do
-    pending
-  end
-
   context "normalization" do
     it "should find a filename with underscores in place of spaces" do
       file_search.find('my way', {search_type: :file}).first.to_s.should match /my_way/
@@ -75,11 +71,6 @@ describe LastfmM3u::FileSearch do
 
     it "should return filename" do
       file_search.find('id3v1-title', {search_type: :id3}).first.should == "#{music_dir}/id3v1.mp3"
-    end
-
-    it "should return title, album, artist, filename" do
-      pending "returning filenames for now to ease sorting/uniq when both filenames and id3s searched"
-      file_search.find('id3v1-title', {search_type: :id3}).first.should == "id3v1-title, id3v1-album, id3v1-artist, #{music_dir}/id3v1.mp3"
     end
 
     context "track" do
