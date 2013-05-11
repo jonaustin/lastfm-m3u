@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/jonaustin/lastfm-m3u.png)](https://codeclimate.com/github/jonaustin/lastfm-m3u)
+
 # Lastfm Top tracks Playlist creator
 
 Searches given directory for mp3/flac files that match lastfm top tracks for given artist.
