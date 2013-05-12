@@ -1,3 +1,3 @@
 module LastfmM3u
-  VERSION = "0.2.4"
+  VERSION = "0.2.41"
 end
