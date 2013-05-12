@@ -43,19 +43,27 @@ module LastfmM3u
     private
 
     def init_config
-      FileUtils.mkdir_p "#{ENV['HOME']}/.config"
-      config_path = "#{ENV['HOME']}/.config/lastfm-m3u.yml"
+      FileUtils.mkdir_p config_dir
+      config_path = "#{config_dir}/lastfm-m3u.yml"
       unless File.exists? config_path
         puts "Copying empty config file to #{config_path}...".color(:green)
-        FileUtils.cp File.join(File.dirname(__FILE__), '../../config/lastfm.yml.dist'), config_path
+        FileUtils.cp(dist_config, config_path)
       end
       config_hash = YAML.load_file(config_path)
-      unless invalid_config?(config_hash)
-        Rockstar.lastfm = config_hash
-      else
+      if invalid_config?(config_hash)
         puts "Please add your api_key and api_secret to:\n  #{config_path}\nGet your keys at http://www.last.fm/api/account".color(:yellow)
-        exit
+        exit false
+      else
+        Rockstar.lastfm = config_hash
       end
+    end
+
+    def config_dir
+      "#{ENV['HOME']}/.config"
+    end
+
+    def dist_config
+      File.join(File.dirname(__FILE__), '../../config/lastfm-spotify.yml.dist')
     end
 
     def invalid_config?(config_hash)
