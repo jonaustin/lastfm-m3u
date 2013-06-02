@@ -63,7 +63,7 @@ module LastfmM3u
     end
 
     def dist_config
-      File.join(File.dirname(__FILE__), '../../config/lastfm-spotify.yml.dist')
+      File.join(File.dirname(__FILE__), '../../config/lastfm.yml.dist')
     end
 
     def invalid_config?(config_hash)
