@@ -18,7 +18,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rockstar',          '~> 0.7'
   gem.add_dependency 'ruby-mp3info',      '~> 0.8'
   gem.add_dependency 'rainbow',           '~> 1.1'
-  gem.add_dependency 'ansi',              '~> 1.4' # color logging
   gem.add_dependency 'm3uzi',             '~> 0.5'
   gem.add_dependency 'highline',          '~> 1.6'
   gem.add_dependency 'ruby-progressbar',  '~> 1.1'

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe LastfmM3u::FileSearch do
-  before { ANSI::Logger.any_instance.stub(:warn => false, :info => false, :debug => false) } # quiet logging
+  before { Logger.any_instance.stub(:warn => false, :info => false, :debug => false) } # quiet logging
 
   let(:file_search) { LastfmM3u::FileSearch.new(music_dir) }
 
