@@ -3,7 +3,6 @@ require 'rubygems'
 require 'optparse'
 require 'ostruct'
 require 'highline/import'
-require 'ruby-progressbar'
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'lastfm-m3u'
@@ -98,7 +97,12 @@ if options.init
 end
 
 unless options.artists
-  puts "Please provide at least one artist (-a Elvis).".color(:red) + "  See".color(:green) + " --help".color(:yellow) + " for usage or".color(:green) + " --init".color(:yellow) + " to get started".color(:green)
+  puts "Please provide at least one artist (-a Elvis).".color(:red) + 
+    "  See".color(:green) + 
+    " --help".color(:yellow) + 
+    " for usage or".color(:green) + 
+    " --init".color(:yellow) + 
+    " to get started".color(:green)
   exit
 end
 
@@ -108,16 +112,13 @@ end
 
 options.artists.each do |artist|
   not_found = []
-  lastfm = LastfmM3u::Lastfm.new(artist)
-  lastfm.root_dir = options.directory if options.directory
-  lastfm.limit = options.limit if options.limit
+  lastfm = LastfmM3u::Lastfm.new(artist, options)
 
   puts
   puts "Searching filesystem with method: ".color(:green) + options.type.to_s.capitalize.color(:yellow)
   puts
   num_tracks = (options.limit.nil? ? lastfm.tracks.size : options.limit)
-  progressbar = ProgressBar.create(starting_at: 0, total: num_tracks, format: "%a".color(:cyan) + "|".color(:magenta) + "%B".color(:green) + "|".color(:magenta) +  "%p%%".color(:cyan))
-  lastfm.find_tracks(options.type, progressbar).each do |track, track_set|
+  lastfm.find_tracks(options.type, false).each do |track, track_set|
     if track_set.empty?
       not_found << track
       next
