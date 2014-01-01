@@ -19,13 +19,12 @@ module LastfmM3u
       prefer_flac = options[:prefer_flac] || true
 
       files = find_unique_files(query, query_type, file_or_id3)
-      if prefer_flac && !(flac_files=trim_non_flac(files)).empty?
-        files = flac_files
+      if prefer_flac
+        files = flac_files(files) || files
       end
       $logger.debug "#{query} => #{files}"
       files
     end
-
 
     private
 
@@ -91,6 +90,10 @@ module LastfmM3u
 
     def normalize(pathname)
       pathname.basename.to_s.gsub('-', ' ').gsub('_', ' ').sub(/#{pathname.extname}$/, '')
+    end
+
+    def flac_files(files)
+      !trim_non_flac(files).empty? && trim_non_flac(files)
     end
 
     def trim_non_flac(pathnames)

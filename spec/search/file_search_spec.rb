@@ -51,16 +51,16 @@ describe LastfmM3u::FileSearch do
       end
     end
 
+    context "prefer flac" do
+      it "should only return flac files if any found" do
+        file_search.find('flac song', {search_type: :file}).to_s.should match /flac_song.flac/
+      end
+
     context "artist or album" do
       it "should find an artist or album directory" do
         file_search.find('biosphere', {query_type: :artist, search_type: :file}).to_s.should match /biosphere/
       end
     end
-
-    context "prefer flac" do
-      it "should only return flac files if any found" do
-        pending
-      end
     end
   end
 
