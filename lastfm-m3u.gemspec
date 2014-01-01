@@ -15,13 +15,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = LastfmM3u::VERSION
 
-  gem.add_development_dependency 'guard-rspec',             '~> 2.5'
-  gem.add_development_dependency 'guard-ctags-bundler',     '~> 0.1'
-  gem.add_development_dependency 'terminal-notifier-guard', '~> 1.5'
-  gem.add_development_dependency 'rb-fsevent',              '~> 0.9'
-  gem.add_development_dependency 'debugger',                '~> 1.5'
-  gem.add_development_dependency 'pry-debugger',            '~> 0.2'
-
   gem.add_dependency 'rockstar',          '~> 0.7'
   gem.add_dependency 'ruby-mp3info',      '~> 0.8'
   gem.add_dependency 'rainbow',           '~> 1.1'
