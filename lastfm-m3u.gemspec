@@ -7,6 +7,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{CLI tool to create m3u playlists of top artist tracks according to lastfm}
   gem.description   = gem.summary
   gem.homepage      = "https://github.com/jonaustin/lastfm-m3u"
+  gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
