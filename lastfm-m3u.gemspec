@@ -15,10 +15,10 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = LastfmM3u::VERSION
 
-  gem.add_dependency 'rockstar',          '~> 0.7'
-  gem.add_dependency 'ruby-mp3info',      '~> 0.8'
-  gem.add_dependency 'rainbow',           '~> 1.1'
+  gem.add_dependency 'rockstar',          '~> 0.8'
+  gem.add_dependency 'ruby-mp3info',      '= 0.8.4' # 0.8.5 breaks reading id3v2 tags
+  gem.add_dependency 'rainbow',           '~> 2.0'
   gem.add_dependency 'm3uzi',             '~> 0.5'
   gem.add_dependency 'highline',          '~> 1.6'
-  gem.add_dependency 'ruby-progressbar',  '~> 1.1'
+  gem.add_dependency 'ruby-progressbar',  '~> 1.7'
 end

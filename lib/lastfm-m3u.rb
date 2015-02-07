@@ -5,7 +5,7 @@ require 'lastfm-m3u/version'
 
 require 'rockstar'
 require 'm3uzi'
-require 'rainbow'
+require 'rainbow/ext/string'
 
 require 'lastfm-m3u/base'
 require 'lastfm-m3u/lastfm'
